@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
   <meta charset="UTF-8" />
-  <title>2026 東京・NijiFes 行程（可編輯＋自動日期）</title>
+  <title>2026 東京・NijiFes 行程表</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     :root {
@@ -109,232 +109,143 @@
       display: block;
     }
 
-    /* 行程可編輯區 */
+    /* 行程表 */
+    .trip-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .trip-header h2 {
+      font-size: 1rem;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      padding: 3px 8px;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      background: var(--primary-soft);
+      color: var(--primary);
+      margin-left: 4px;
+    }
+
     .trip-note {
       font-size: 0.8rem;
       color: var(--text-sub);
-      margin-bottom: 8px;
     }
 
-    .date-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 8px;
-      flex-wrap: wrap;
-    }
-
-    .date-label {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 0.8rem;
-      color: var(--text-sub);
-    }
-
-    .date-label input[type="date"] {
-      padding: 4px 6px;
-      border-radius: 6px;
+    .table-wrapper {
+      overflow-x: auto;
+      border-radius: 10px;
       border: 1px solid var(--border);
+      margin-top: 8px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 720px;
       font-size: 0.85rem;
-      background: #fff;
     }
 
-    .controls {
-      display: flex;
-      justify-content: flex-end;
-      gap: 8px;
-      margin-bottom: 10px;
-      flex-wrap: wrap;
-    }
-
-    .btn {
-      border-radius: 999px;
-      border: none;
-      padding: 6px 12px;
-      font-size: 0.85rem;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      background: var(--primary);
-      color: white;
-      font-weight: 500;
-    }
-
-    .btn-ghost {
-      border-radius: 999px;
-      border: 1px solid var(--border);
-      padding: 4px 10px;
-      font-size: 0.8rem;
-      cursor: pointer;
+    thead {
       background: #f9fafb;
+    }
+
+    th,
+    td {
+      padding: 8px 10px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+    }
+
+    th {
+      text-align: left;
+      font-weight: 600;
       color: var(--text-sub);
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-    }
-
-    .btn-small {
-      font-size: 0.8rem;
-      padding: 4px 10px;
-    }
-
-    .day-list {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    .day-card {
+      position: sticky;
+      top: 0;
       background: #f9fafb;
-      border-radius: 12px;
-      border: 1px solid var(--border);
-      padding: 10px 10px 8px;
-      cursor: grab;
+      z-index: 1;
     }
 
-    .day-card.dragging {
-      opacity: 0.6;
-      border-style: dashed;
+    tbody tr:nth-child(even) {
+      background: #f9fafb;
     }
 
-    .day-header {
-      display: flex;
-      justify-content: space-between;
-      gap: 8px;
-      align-items: center;
-      margin-bottom: 6px;
-    }
-
-    .day-title {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-
-    .day-label {
-      background: var(--primary);
-      color: white;
-      border-radius: 999px;
-      padding: 2px 10px;
-      font-size: 0.8rem;
+    .date-cell {
       font-weight: 600;
+      white-space: nowrap;
     }
 
-    .day-date {
-      font-size: 0.9rem;
-      font-weight: 600;
-    }
-
-    .area-tag {
-      font-size: 0.75rem;
-      padding: 2px 8px;
+    .area-chip {
+      display: inline-flex;
+      padding: 2px 7px;
       border-radius: 999px;
       background: #fee2e2;
       color: #b91c1c;
-    }
-
-    .area-tag.editable {
-      padding: 2px 8px;
-    }
-
-    .spots {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      margin-top: 4px;
-    }
-
-    .spot-card {
-      background: white;
-      border-radius: 10px;
-      border: 1px solid var(--border);
-      padding: 8px;
-      cursor: grab;
-    }
-
-    .spot-card.dragging {
-      opacity: 0.6;
-      border-style: dashed;
-    }
-
-    .spot-top {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 8px;
+      font-size: 0.75rem;
       margin-bottom: 4px;
     }
 
-    .spot-title-label {
-      font-size: 0.8rem;
-      color: var(--text-sub);
+    .area-chip--yellow {
+      background: #fef3c7;
+      color: #92400e;
     }
 
-    .editable {
-      padding: 4px 6px;
-      border-radius: 6px;
-      border: 1px dashed transparent;
-      min-height: 20px;
+    .area-chip--purple {
+      background: #ede9fe;
+      color: #5b21b6;
     }
 
-    .editable:focus {
-      outline: none;
-      border-color: var(--primary);
-      background: #eef2ff;
+    .area-chip--blue {
+      background: #dbeafe;
+      color: #1d4ed8;
     }
 
-    .field-label {
-      font-size: 0.8rem;
-      color: var(--text-sub);
-      margin-top: 4px;
+    .area-chip--green {
+      background: #dcfce7;
+      color: #15803d;
+    }
+
+    .place-title {
+      font-weight: 600;
       margin-bottom: 2px;
     }
 
-    .image-list,
-    .note-image-list {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      margin: 4px 0;
-    }
-
-    .image-list img,
-    .note-image-list img {
-      width: 70px;
-      height: 70px;
-      object-fit: cover;
-      border-radius: 8px;
-      border: 1px solid var(--border);
-    }
-
-    .spot-note {
-      margin-top: 6px;
-      padding-top: 6px;
-      border-top: 1px dashed var(--border);
-    }
-
-    .note-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .note-header span {
-      font-size: 0.8rem;
+    .place-sub {
       color: var(--text-sub);
-      font-weight: 500;
+      font-size: 0.8rem;
+      line-height: 1.3;
     }
 
-    .file-input {
-      display: none;
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 2px 6px;
+      border-radius: 999px;
+      font-size: 0.7rem;
+      background: #e0f2fe;
+      color: #0369a1;
+      margin-right: 4px;
     }
 
-    /* 其他分頁 */
+    .highlight {
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    .empty-row {
+      color: #9ca3af;
+      font-style: italic;
+    }
+
+    /* 其他分頁大致排版 */
     .section-box {
       border-radius: 10px;
       border: 1px dashed var(--border);
@@ -372,14 +283,20 @@
       main {
         padding: 10px;
       }
+      .table-wrapper {
+        margin: 0 -6px;
+        border-radius: 0;
+        border-left: none;
+        border-right: none;
+      }
     }
   </style>
 </head>
 <body>
   <div class="container">
     <header>
-      <h1>2026 東京・NijiFes 行程（可編輯＋自動日期）</h1>
-      <p>設定出發日期後，Day1 ~ DayN 的日期會自動計算；可拖拉調整順序、編輯內容、幫景點加圖片與備註。</p>
+      <h1>2026 東京・NijiFes 行程</h1>
+      <p>依據試算表行程整理成的可瀏覽網頁空間，之後可以再自行調整內容。</p>
       <div class="year-badge">
         <span>📅 旅程年份</span> <strong>2026</strong>
       </div>
@@ -393,232 +310,285 @@
     </div>
 
     <main>
-      <!-- 行程分頁 -->
+      <!-- 行程 -->
       <section id="schedule" class="tab-panel active">
-        <p class="trip-note">
-          提示：設定「出發日期」後，每一個 Day 的日期會自動依照順序往後推算；拖拉日期卡片改順序也會自動更新。
-        </p>
-
-        <div class="date-row">
-          <label class="date-label">
-            出發日期：
-            <!-- 預設 2026-05-08，可改成你實際出發日 -->
-            <input type="date" id="start-date" value="2026-05-08" />
-          </label>
+        <div class="trip-header">
+          <h2>
+            行程總覽
+            <span class="tag">東京・橫濱・幕張</span>
+          </h2>
+          <p class="trip-note">2026/5/8 – 2026/5/21 ・ 共 14 天</p>
         </div>
 
-        <div class="controls">
-          <button class="btn" id="add-day-btn">＋ 新增一天</button>
-        </div>
-
-        <div class="day-list" id="day-list">
-          <!-- Day 1 -->
-          <article class="day-card" draggable="true">
-            <div class="day-header">
-              <div class="day-title">
-                <span class="day-label">Day 1</span>
-                <span class="day-date"></span>
-                <span class="area-tag editable" contenteditable="true">成田・上野</span>
-              </div>
-              <button class="btn-ghost btn-small add-spot-btn">＋ 新增景點</button>
-            </div>
-
-            <div class="spots">
-              <div class="spot-card" draggable="true">
-                <div class="spot-top">
-                  <span class="spot-title-label">景點卡片</span>
-                  <div>
-                    <button class="btn-ghost btn-small upload-image-btn">🖼 新增圖片</button>
-                    <input type="file" accept="image/*" multiple class="file-input image-input" />
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th style="width: 70px;">日期</th>
+                <th style="width: 90px;">區域</th>
+                <th>主要行程 / 地點</th>
+                <th style="width: 230px;">地點・地址・營業時間 / 備註</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- 5/8 -->
+              <tr>
+                <td class="date-cell">5/8 (五)</td>
+                <td>
+                  <div class="area-chip area-chip--blue">成田・上野</div>
+                </td>
+                <td>
+                  <div class="place-title">成田機場 → 東京市區</div>
+                  <div class="place-sub">入境、轉車前往上野飯店，放行李後附近逛逛。</div>
+                </td>
+                <td>
+                  <span class="badge">住宿</span>
+                  <div class="place-sub">
+                    VESSEL INN UENO IRIYA STATION<br />
+                    〒110-0013 東京都台東区入谷1丁目2-5-6
                   </div>
-                </div>
+                </td>
+              </tr>
 
-                <div class="image-list"></div>
-
-                <div class="field-label">景點名稱</div>
-                <div class="editable" contenteditable="true">
-                  成田機場 → 東京市區
-                </div>
-
-                <div class="field-label">地點／地址／時間</div>
-                <div class="editable" contenteditable="true">
-                  入境後前往上野飯店，放行李後附近逛逛。<br />
-                  住宿：VESSEL INN UENO IRIYA STATION（可自行修改）
-                </div>
-
-                <div class="spot-note">
-                  <div class="note-header">
-                    <span>備註</span>
-                    <div>
-                      <button class="btn-ghost btn-small upload-note-image-btn">🖼 新增圖片</button>
-                      <input type="file" accept="image/*" multiple class="file-input note-image-input" />
-                    </div>
+              <!-- 5/9 -->
+              <tr>
+                <td class="date-cell">5/9 (六)</td>
+                <td>
+                  <div class="area-chip area-chip--purple">上野・秋葉原</div>
+                </td>
+                <td>
+                  <div class="place-title">上野公園 / 阿美橫丁・秋葉原逛街</div>
+                  <div class="place-sub">
+                    依照試算表安排：上野周邊散步、戰利品採買、秋葉原動漫相關店家。
                   </div>
-                  <div class="note-image-list"></div>
-                  <div class="editable" contenteditable="true">
-                    這裡可以記錄航班資訊、入境注意事項等。
+                </td>
+                <td>
+                  <span class="badge">住宿</span>
+                  <div class="place-sub">同前一晚飯店（上野附近）</div>
+                </td>
+              </tr>
+
+              <!-- 5/10 -->
+              <tr>
+                <td class="date-cell">5/10 (日)</td>
+                <td>
+                  <div class="area-chip area-chip--yellow">澀谷・原宿</div>
+                </td>
+                <td>
+                  <div class="place-title">澀谷・原宿一日遊</div>
+                  <div class="place-sub">
+                    Kiddy Land 原宿本店、竹下通、表參道等，可配合試算表調整店家順序。
                   </div>
-                </div>
-              </div>
-            </div>
-          </article>
-
-          <!-- Day 2 -->
-          <article class="day-card" draggable="true">
-            <div class="day-header">
-              <div class="day-title">
-                <span class="day-label">Day 2</span>
-                <span class="day-date"></span>
-                <span class="area-tag editable" contenteditable="true">上野・秋葉原</span>
-              </div>
-              <button class="btn-ghost btn-small add-spot-btn">＋ 新增景點</button>
-            </div>
-
-            <div class="spots">
-              <div class="spot-card" draggable="true">
-                <div class="spot-top">
-                  <span class="spot-title-label">景點卡片</span>
-                  <div>
-                    <button class="btn-ghost btn-small upload-image-btn">🖼 新增圖片</button>
-                    <input type="file" accept="image/*" multiple class="file-input image-input" />
+                </td>
+                <td>
+                  <div class="place-sub">
+                    Kiddy Land 原宿本店<br />
+                    東京都渋谷区神宮前6-1-9<br />
+                    11:00–20:00（以實際為準）
                   </div>
-                </div>
-                <div class="image-list"></div>
+                </td>
+              </tr>
 
-                <div class="field-label">景點名稱</div>
-                <div class="editable" contenteditable="true">
-                  上野公園・阿美橫丁・秋葉原
-                </div>
-
-                <div class="field-label">地點／地址／時間</div>
-                <div class="editable" contenteditable="true">
-                  依試算表安排，上野周邊散步、戰利品採買、前往秋葉原逛店。
-                </div>
-
-                <div class="spot-note">
-                  <div class="note-header">
-                    <span>備註</span>
-                    <div>
-                      <button class="btn-ghost btn-small upload-note-image-btn">🖼 新增圖片</button>
-                      <input type="file" accept="image/*" multiple class="file-input note-image-input" />
-                    </div>
+              <!-- 5/11 -->
+              <tr>
+                <td class="date-cell">5/11 (一)</td>
+                <td>
+                  <div class="area-chip area-chip--red">淺草</div>
+                </td>
+                <td>
+                  <div class="place-title">淺草寺・仲見世通</div>
+                  <div class="place-sub">雷門拍照、淺草寺參拜、周邊商店街逛街。</div>
+                </td>
+                <td>
+                  <div class="place-sub">
+                    淺草寺<br />
+                    東京都台東区浅草2-3-1
                   </div>
-                  <div class="note-image-list"></div>
-                  <div class="editable" contenteditable="true">
-                    可以記錄想去的店家、餐廳名稱、預算等等。
+                </td>
+              </tr>
+
+              <!-- 5/12 -->
+              <tr>
+                <td class="date-cell">5/12 (二)</td>
+                <td>
+                  <div class="area-chip area-chip--blue">新宿</div>
+                </td>
+                <td>
+                  <div class="place-title">新宿散策・靖國神社</div>
+                  <div class="place-sub">
+                    百貨、美食；依試算表內容安排其他景點。
                   </div>
-                </div>
-              </div>
-            </div>
-          </article>
-
-          <!-- Day 3 (澀谷・原宿) -->
-          <article class="day-card" draggable="true">
-            <div class="day-header">
-              <div class="day-title">
-                <span class="day-label">Day 3</span>
-                <span class="day-date"></span>
-                <span class="area-tag editable" contenteditable="true">澀谷・原宿</span>
-              </div>
-              <button class="btn-ghost btn-small add-spot-btn">＋ 新增景點</button>
-            </div>
-
-            <div class="spots">
-              <div class="spot-card" draggable="true">
-                <div class="spot-top">
-                  <span class="spot-title-label">景點卡片</span>
-                  <div>
-                    <button class="btn-ghost btn-small upload-image-btn">🖼 新增圖片</button>
-                    <input type="file" accept="image/*" multiple class="file-input image-input" />
+                </td>
+                <td>
+                  <span class="badge">景點</span>
+                  <div class="place-sub">
+                    靖國神社<br />
+                    東京都千代田区九段北3丁目1−1<br />
+                    AM 9:00 – PM 5:00
                   </div>
-                </div>
-                <div class="image-list"></div>
+                </td>
+              </tr>
 
-                <div class="field-label">景點名稱</div>
-                <div class="editable" contenteditable="true">
-                  Kiddy Land・竹下通・表參道
-                </div>
+              <!-- 5/13 -->
+              <tr>
+                <td class="date-cell">5/13 (三)</td>
+                <td>
+                  <div class="area-chip area-chip--green">待補</div>
+                </td>
+                <td class="empty-row" colspan="2">
+                  這一天的行程可以依照你的試算表補上（例如：池袋、自由活動…）
+                </td>
+              </tr>
 
-                <div class="field-label">地點／地址／時間</div>
-                <div class="editable" contenteditable="true">
-                  Kiddy Land 原宿本店（東京都渋谷区神宮前6-1-9）。<br />
-                  其他店家與時間可自行補上。
-                </div>
+              <!-- 5/14 -->
+              <tr>
+                <td class="date-cell">5/14 (四)</td>
+                <td>
+                  <div class="area-chip area-chip--green">待補</div>
+                </td>
+                <td class="empty-row" colspan="2">
+                  依試算表內容自行填入（可保留給臨時想去的店家）。
+                </td>
+              </tr>
 
-                <div class="spot-note">
-                  <div class="note-header">
-                    <span>備註</span>
-                    <div>
-                      <button class="btn-ghost btn-small upload-note-image-btn">🖼 新增圖片</button>
-                      <input type="file" accept="image/*" multiple class="file-input note-image-input" />
-                    </div>
+              <!-- 5/15 -->
+              <tr>
+                <td class="date-cell">5/15 (五)</td>
+                <td>
+                  <div class="area-chip area-chip--green">待補</div>
+                </td>
+                <td class="empty-row" colspan="2">
+                  預留彈性日 or 調整前幾天沒跑完的景點。
+                </td>
+              </tr>
+
+              <!-- 5/16 NijiFes -->
+              <tr>
+                <td class="date-cell">5/16 (六)</td>
+                <td>
+                  <div class="area-chip area-chip--purple">NijiFes</div>
+                </td>
+                <td>
+                  <div class="place-title">
+                    <span class="highlight">NijiFes Day 1</span>（幕張展覽館）
                   </div>
-                  <div class="note-image-list"></div>
-                  <div class="editable" contenteditable="true">
-                    可以附上店家地圖截圖、排隊經驗等等。
+                  <div class="place-sub">
+                    以活動為主，排隊・入場・逛會場攤位、舞台活動。
                   </div>
-                </div>
-              </div>
-            </div>
-          </article>
-
-          <!-- NijiFes Day 示例 -->
-          <article class="day-card" draggable="true">
-            <div class="day-header">
-              <div class="day-title">
-                <span class="day-label">Day 4</span>
-                <span class="day-date"></span>
-                <span class="area-tag editable" contenteditable="true">NijiFes Day 1</span>
-              </div>
-              <button class="btn-ghost btn-small add-spot-btn">＋ 新增景點</button>
-            </div>
-
-            <div class="spots">
-              <div class="spot-card" draggable="true">
-                <div class="spot-top">
-                  <span class="spot-title-label">景點卡片</span>
-                  <div>
-                    <button class="btn-ghost btn-small upload-image-btn">🖼 新增圖片</button>
-                    <input type="file" accept="image/*" multiple class="file-input image-input" />
+                </td>
+                <td>
+                  <span class="badge">活動會場</span>
+                  <div class="place-sub">
+                    幕張展覽館<br />
+                    千葉市美浜区中瀬2-1
                   </div>
-                </div>
-                <div class="image-list"></div>
+                </td>
+              </tr>
 
-                <div class="field-label">景點名稱</div>
-                <div class="editable" contenteditable="true">
-                  NijiFes 會場（幕張展覽館）
-                </div>
-
-                <div class="field-label">地點／地址／時間</div>
-                <div class="editable" contenteditable="true">
-                  千葉市美浜区中瀬2-1。<br />
-                  實際入場時間與場次請依官方資訊更新。
-                </div>
-
-                <div class="spot-note">
-                  <div class="note-header">
-                    <span>備註</span>
-                    <div>
-                      <button class="btn-ghost btn-small upload-note-image-btn">🖼 新增圖片</button>
-                      <input type="file" accept="image/*" multiple class="file-input note-image-input" />
-                    </div>
+              <!-- 5/17 NijiFes -->
+              <tr>
+                <td class="date-cell">5/17 (日)</td>
+                <td>
+                  <div class="area-chip area-chip--purple">NijiFes</div>
+                </td>
+                <td>
+                  <div class="place-title">
+                    <span class="highlight">NijiFes Day 2</span>（幕張展覽館）
                   </div>
-                  <div class="note-image-list"></div>
-                  <div class="editable" contenteditable="true">
-                    可放周邊購物清單、排隊動線、想看的舞台時間等。
+                  <div class="place-sub">
+                    活動第二天，依試算表安排周邊、特典、舞台場次。
                   </div>
-                </div>
-              </div>
-            </div>
-          </article>
+                </td>
+                <td>
+                  <span class="badge">活動會場</span>
+                  <div class="place-sub">
+                    幕張展覽館<br />
+                    千葉市美浜区中瀬2-1
+                  </div>
+                </td>
+              </tr>
+
+              <!-- 5/18 -->
+              <tr>
+                <td class="date-cell">5/18 (一)</td>
+                <td>
+                  <div class="area-chip area-chip--green">休息・移動</div>
+                </td>
+                <td class="empty-row" colspan="2">
+                  NijiFes 結束後的緩衝日，可安排睡晚一點、附近逛街或移動到橫濱。
+                </td>
+              </tr>
+
+              <!-- 5/19 橫濱 -->
+              <tr>
+                <td class="date-cell">5/19 (二)</td>
+                <td>
+                  <div class="area-chip area-chip--blue">橫濱</div>
+                </td>
+                <td>
+                  <div class="place-title">橫濱 VIVRE・商場逛街</div>
+                  <div class="place-sub">
+                    依試算表：橫濱 VIVRE 等商場，採買、吃美食。
+                  </div>
+                </td>
+                <td>
+                  <span class="badge">購物</span>
+                  <div class="place-sub">
+                    橫濱 VIVRE<br />
+                    神奈川県横浜市西区南幸2-15-13<br />
+                    平日 11:00–21:00 / 假日 10:00–21:00（以官網為準）
+                  </div>
+                </td>
+              </tr>
+
+              <!-- 5/20 伴手禮 -->
+              <tr>
+                <td class="date-cell">5/20 (三)</td>
+                <td>
+                  <div class="area-chip area-chip--yellow">伴手禮採買</div>
+                </td>
+                <td>
+                  <div class="place-title">伴手禮採買日</div>
+                  <div class="place-sub">
+                    以超市、藥妝店、車站商店街為主，把想帶回台灣的東西一次買齊。
+                  </div>
+                </td>
+                <td>
+                  <div class="place-sub">
+                    備註：確認托運行李重量、整理行李、預先丟掉多餘包裝。
+                  </div>
+                </td>
+              </tr>
+
+              <!-- 5/21 回程 -->
+              <tr>
+                <td class="date-cell">5/21 (四)</td>
+                <td>
+                  <div class="area-chip area-chip--red">返台</div>
+                </td>
+                <td>
+                  <div class="place-title">東京 → 成田機場 → 回台灣</div>
+                  <div class="place-sub">
+                    退房、前往機場辦理退稅與托運，搭機返回台灣。
+                  </div>
+                </td>
+                <td>
+                  <div class="place-sub">
+                    建議提早 3 小時到機場，確認交通與航班時間。（可在此填上實際班機資訊）
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </section>
 
-      <!-- 總花費分頁 -->
+      <!-- 總花費 -->
       <section id="cost" class="tab-panel">
         <h2>總花費整理</h2>
         <p class="trip-note">
-          這一頁預留給你把試算表中的「總花費」整理進來（機票 / 住宿 / 交通 / 門票 / 餐飲 / 購物等）。
+          這一頁預留給你把試算表中的「總花費」整理進來（機票 / 住宿 / 交通 /
+          門票 / 餐飲 / 購物等）。
         </p>
 
         <div class="section-box">
@@ -640,7 +610,7 @@
         </div>
       </section>
 
-      <!-- NijiFes 分頁 -->
+      <!-- NijiFes 周邊 -->
       <section id="nijifes" class="tab-panel">
         <h2>NijiFes 周邊／活動專區</h2>
         <p class="trip-note">
@@ -669,305 +639,21 @@
   </div>
 
   <script>
-    // ---------------- Tab 切換 ----------------
+    // 簡單 Tab 切換
     const tabs = document.querySelectorAll(".tab");
     const panels = document.querySelectorAll(".tab-panel");
 
     tabs.forEach((tab) => {
       tab.addEventListener("click", () => {
         const target = tab.dataset.tab;
+
         tabs.forEach((t) => t.classList.remove("active"));
         panels.forEach((p) => p.classList.remove("active"));
+
         tab.classList.add("active");
         document.getElementById(target).classList.add("active");
       });
     });
-
-    // ---------------- 初始化 ----------------
-    function init() {
-      initDayDragAndDrop();
-      initSpotDragAndDrop();
-      initImageButtons();
-      initAddSpotButtons();
-      initAddDayButton();
-      initStartDate();
-      updateDayLabels(); // 會順便算日期
-    }
-
-    // ---------------- 出發日期 & 自動日期 ----------------
-    function initStartDate() {
-      const startInput = document.getElementById("start-date");
-      if (!startInput) return;
-      startInput.addEventListener("change", () => {
-        updateDates(); // 修改出發日期就重算
-      });
-    }
-
-    function formatDate(date) {
-      const month = date.getMonth() + 1;
-      const day = date.getDate();
-      const weekdays = ["日", "一", "二", "三", "四", "五", "六"];
-      const w = weekdays[date.getDay()];
-      return `${month}/${day} (${w})`;
-    }
-
-    function updateDates() {
-      const startInput = document.getElementById("start-date");
-      if (!startInput || !startInput.value) return;
-
-      const base = new Date(startInput.value);
-      if (isNaN(base.getTime())) return;
-
-      const dayCards = document.querySelectorAll("#day-list .day-card");
-      dayCards.forEach((card, index) => {
-        const span = card.querySelector(".day-date");
-        if (!span) return;
-        const d = new Date(base);
-        d.setDate(d.getDate() + index); // Day1 = 出發日，Day2 = +1 ...
-        span.textContent = formatDate(d);
-      });
-    }
-
-    // ---------------- 拖拉排序：Day ----------------
-    function initDayDragAndDrop() {
-      const dayList = document.getElementById("day-list");
-      let draggingCard = null;
-
-      dayList.querySelectorAll(".day-card").forEach((card) => {
-        card.addEventListener("dragstart", (e) => {
-          draggingCard = card;
-          card.classList.add("dragging");
-          e.dataTransfer.effectAllowed = "move";
-        });
-
-        card.addEventListener("dragend", () => {
-          if (draggingCard) {
-            draggingCard.classList.remove("dragging");
-            draggingCard = null;
-            updateDayLabels(); // 拖完重排 Day 編號 & 日期
-          }
-        });
-      });
-
-      dayList.addEventListener("dragover", (e) => {
-        e.preventDefault();
-        const afterElement = getDragAfterElement(dayList, e.clientY);
-        const draggable = dayList.querySelector(".day-card.dragging");
-        if (!draggable) return;
-        if (afterElement == null) {
-          dayList.appendChild(draggable);
-        } else {
-          dayList.insertBefore(draggable, afterElement);
-        }
-      });
-    }
-
-    function getDragAfterElement(container, y) {
-      const draggableElements = [
-        ...container.querySelectorAll(".day-card:not(.dragging)"),
-      ];
-
-      return draggableElements.reduce(
-        (closest, child) => {
-          const box = child.getBoundingClientRect();
-          const offset = y - box.top - box.height / 2;
-          if (offset < 0 && offset > closest.offset) {
-            return { offset: offset, element: child };
-          } else {
-            return closest;
-          }
-        },
-        { offset: Number.NEGATIVE_INFINITY, element: null }
-      ).element;
-    }
-
-    // ---------------- 拖拉排序：景點卡片 ----------------
-    function initSpotDragAndDrop() {
-      document.querySelectorAll(".spots").forEach((spotsContainer) => {
-        let draggingSpot = null;
-
-        spotsContainer.querySelectorAll(".spot-card").forEach((card) => {
-          card.addEventListener("dragstart", (e) => {
-            draggingSpot = card;
-            card.classList.add("dragging");
-            e.dataTransfer.effectAllowed = "move";
-          });
-
-          card.addEventListener("dragend", () => {
-            if (draggingSpot) {
-              draggingSpot.classList.remove("dragging");
-              draggingSpot = null;
-            }
-          });
-        });
-
-        spotsContainer.addEventListener("dragover", (e) => {
-          e.preventDefault();
-          const afterElement = getDragAfterElementSpot(
-            spotsContainer,
-            e.clientY
-          );
-          const draggable = spotsContainer.querySelector(".spot-card.dragging");
-          if (!draggable) return;
-          if (afterElement == null) {
-            spotsContainer.appendChild(draggable);
-          } else {
-            spotsContainer.insertBefore(draggable, afterElement);
-          }
-        });
-      });
-    }
-
-    function getDragAfterElementSpot(container, y) {
-      const draggableElements = [
-        ...container.querySelectorAll(".spot-card:not(.dragging)"),
-      ];
-
-      return draggableElements.reduce(
-        (closest, child) => {
-          const box = child.getBoundingClientRect();
-          const offset = y - box.top - box.height / 2;
-          if (offset < 0 && offset > closest.offset) {
-            return { offset: offset, element: child };
-          } else {
-            return closest;
-          }
-        },
-        { offset: Number.NEGATIVE_INFINITY, element: null }
-      ).element;
-    }
-
-    // ---------------- 新增圖片（景點 & 備註） ----------------
-    function initImageButtons(root = document) {
-      // 景點圖片
-      root.querySelectorAll(".upload-image-btn").forEach((btn) => {
-        const input = btn.parentElement.querySelector(".image-input");
-        const list = btn.closest(".spot-card").querySelector(".image-list");
-
-        btn.addEventListener("click", () => input.click());
-
-        input.addEventListener("change", () => {
-          Array.from(input.files).forEach((file) => {
-            const reader = new FileReader();
-            reader.onload = (e) => {
-              const img = document.createElement("img");
-              img.src = e.target.result;
-              list.appendChild(img);
-            };
-            reader.readAsDataURL(file);
-          });
-          input.value = "";
-        });
-      });
-
-      // 備註圖片
-      root.querySelectorAll(".upload-note-image-btn").forEach((btn) => {
-        const input = btn.parentElement.querySelector(".note-image-input");
-        const list = btn
-          .closest(".spot-card")
-          .querySelector(".note-image-list");
-
-        btn.addEventListener("click", () => input.click());
-
-        input.addEventListener("change", () => {
-          Array.from(input.files).forEach((file) => {
-            const reader = new FileReader();
-            reader.onload = (e) => {
-              const img = document.createElement("img");
-              img.src = e.target.result;
-              list.appendChild(img);
-            };
-            reader.readAsDataURL(file);
-          });
-          input.value = "";
-        });
-      });
-    }
-
-    // ---------------- 新增景點卡片 ----------------
-    function initAddSpotButtons(root = document) {
-      root.querySelectorAll(".add-spot-btn").forEach((btn) => {
-        btn.addEventListener("click", () => {
-          const dayCard = btn.closest(".day-card");
-          const spots = dayCard.querySelector(".spots");
-
-          const template = document.createElement("div");
-          template.className = "spot-card";
-          template.setAttribute("draggable", "true");
-          template.innerHTML = `
-            <div class="spot-top">
-              <span class="spot-title-label">景點卡片</span>
-              <div>
-                <button class="btn-ghost btn-small upload-image-btn">🖼 新增圖片</button>
-                <input type="file" accept="image/*" multiple class="file-input image-input" />
-              </div>
-            </div>
-            <div class="image-list"></div>
-            <div class="field-label">景點名稱</div>
-            <div class="editable" contenteditable="true">新的景點</div>
-            <div class="field-label">地點／地址／時間</div>
-            <div class="editable" contenteditable="true">在這裡填入詳細資訊。</div>
-            <div class="spot-note">
-              <div class="note-header">
-                <span>備註</span>
-                <div>
-                  <button class="btn-ghost btn-small upload-note-image-btn">🖼 新增圖片</button>
-                  <input type="file" accept="image/*" multiple class="file-input note-image-input" />
-                </div>
-              </div>
-              <div class="note-image-list"></div>
-              <div class="editable" contenteditable="true">備註內容。</div>
-            </div>
-          `;
-
-          spots.appendChild(template);
-          initSpotDragAndDrop();
-          initImageButtons(template);
-        });
-      });
-    }
-
-    // ---------------- 新增一天 ----------------
-    function initAddDayButton() {
-      const btn = document.getElementById("add-day-btn");
-      const dayList = document.getElementById("day-list");
-
-      btn.addEventListener("click", () => {
-        const dayCard = document.createElement("article");
-        dayCard.className = "day-card";
-        dayCard.setAttribute("draggable", "true");
-
-        dayCard.innerHTML = `
-          <div class="day-header">
-            <div class="day-title">
-              <span class="day-label">Day ?</span>
-              <span class="day-date"></span>
-              <span class="area-tag editable" contenteditable="true">新區域</span>
-            </div>
-            <button class="btn-ghost btn-small add-spot-btn">＋ 新增景點</button>
-          </div>
-          <div class="spots"></div>
-        `;
-
-        dayList.appendChild(dayCard);
-        initDayDragAndDrop();
-        initAddSpotButtons(dayCard);
-        updateDayLabels(); // 新增後重排 Day 編號＆日期
-      });
-    }
-
-    // ---------------- Day 標籤自動重排 ----------------
-    function updateDayLabels() {
-      const dayCards = document.querySelectorAll("#day-list .day-card");
-      dayCards.forEach((card, index) => {
-        const label = card.querySelector(".day-label");
-        if (label) label.textContent = `Day ${index + 1}`;
-      });
-      updateDates(); // 每次 Day 順序變化就同步重算日期
-    }
-
-    // ---------------- 啟動 ----------------
-    document.addEventListener("DOMContentLoaded", init);
   </script>
 </body>
 </html>
