@@ -25,6 +25,9 @@
     header {
       padding: 18px 16px 10px;
       background: #ffe6b8;
+      border-bottom-left-radius: 24px;
+      border-bottom-right-radius: 24px;
+      box-shadow: 0 2px 6px rgba(0,0,0,.12);
     }
     h1 {
       margin: 0;
@@ -71,6 +74,7 @@
     .btn-secondary {
       background: #fff9ef;
     }
+
     .day-nav {
       background: #fff5de;
       padding: 8px 4px 10px;
@@ -114,6 +118,7 @@
     [contenteditable="true"] {
       outline: none;
     }
+
     main {
       padding: 10px 10px 90px;
       background: linear-gradient(#e8f5ff, #fff9ee);
@@ -130,18 +135,45 @@
       font-weight: 700;
       margin-bottom: 10px;
     }
+
     .expense-card {
-      background: #fff;
-      border-radius: 14px;
-      padding: 10px 12px;
+      background: #fffef8;
+      border-radius: 16px;
+      padding: 8px 10px 10px;
       font-size: 14px;
       margin-bottom: 10px;
-      border: 1px solid #e6f0ff;
+      border: 1px dashed var(--border-soft);
+    }
+    .expense-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 4px;
     }
     .expense-title {
       font-weight: 700;
-      margin-bottom: 4px;
+      font-size: 14px;
     }
+    .expense-body {
+      font-size: 13px;
+      line-height: 1.5;
+      min-height: 32px;
+      white-space: pre-wrap;
+    }
+    .expense-image-list {
+      margin-top: 6px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .expense-photo-btn {
+      padding: 4px 10px;
+      font-size: 12px;
+      background: #ffe1aa;
+    }
+
     .quick-add {
       background: #fffaf3;
       border-radius: 16px;
@@ -208,6 +240,7 @@
     .btn-drag {
       font-size: 11px;
     }
+
     .image-list,
     .note-image-list {
       margin-top: 6px;
@@ -273,11 +306,15 @@
 </head>
 <body>
   <header>
-    <h1>Niji Trip 2026 🌈</h1>
-    <p>東京行程・暖色主題・拖拉排序＋住宿欄位＋每日花費＋回上一步。</p>
+    <h1 contenteditable="true">Niji Trip 2026 🌈</h1>
+    <p contenteditable="true">
+      東京行程・暖色主題・拖拉排序＋住宿＋圖片＋雲端備份。
+    </p>
     <div class="hint">
       <span>✏️</span>
-      <div>行程卡可以直接改文字、拖拉排序；錯誤可以用右下角「回上一步」。</div>
+      <div contenteditable="true">
+        每張行程卡可拖拉排序、加入圖片、開啟地圖預覽。資料會自動儲存，也可以匯出 JSON 上傳雲端。
+      </div>
     </div>
     <div class="top-btn-row">
       <button id="btnExport">匯出備份（JSON）</button>
@@ -296,23 +333,40 @@
     <div class="day-nav-row">
       <a class="day-chip" href="#day-1" data-day-id="day-1" draggable="true">
         <span class="day-chip-main" contenteditable="true">Day 1</span>
-        <span class="day-chip-sub" contenteditable="true">5/20</span>
+        <span class="day-chip-sub" contenteditable="true">5/8</span>
       </a>
       <a class="day-chip" href="#day-2" data-day-id="day-2" draggable="true">
         <span class="day-chip-main" contenteditable="true">Day 2</span>
-        <span class="day-chip-sub" contenteditable="true">5/21</span>
+        <span class="day-chip-sub" contenteditable="true">5/9</span>
+      </a>
+      <a class="day-chip" href="#day-3" data-day-id="day-3" draggable="true">
+        <span class="day-chip-main" contenteditable="true">Day 3</span>
+        <span class="day-chip-sub" contenteditable="true">5/10</span>
+      </a>
+      <a class="day-chip" href="#day-4" data-day-id="day-4" draggable="true">
+        <span class="day-chip-main" contenteditable="true">Day 4</span>
+        <span class="day-chip-sub" contenteditable="true">5/11</span>
+      </a>
+      <a class="day-chip" href="#day-5" data-day-id="day-5" draggable="true">
+        <span class="day-chip-main" contenteditable="true">Day 5</span>
+        <span class="day-chip-sub" contenteditable="true">5/12</span>
       </a>
     </div>
   </div>
 
   <main id="content">
     <!-- Day 1 -->
-    <section id="day-1" data-date="5/20">
-      <div class="day-title editable-block" contenteditable="true">Day 1（5/20）</div>
+    <section id="day-1" data-date="5/8">
+      <div class="day-title" contenteditable="true">Day 1（5/8）</div>
 
-      <div class="expense-card editable-block" contenteditable="true">
-        <div class="expense-title">當日備註／花費</div>
-        <div>今天的行程內容請在下方新增行程卡片，或貼上舊檔內容。</div>
+      <div class="expense-card">
+        <div class="expense-header">
+          <div class="expense-title" contenteditable="true">當日備註／花費</div>
+          <button class="expense-photo-btn btn" type="button">📷</button>
+        </div>
+        <div class="expense-body" contenteditable="true">
+例：餐飲 xxx 元，交通 xxx 元，購物 xxx 元，其他心得……</div>
+        <div class="expense-image-list"></div>
       </div>
 
       <div class="quick-add">
@@ -333,6 +387,7 @@
         <div class="btn-row">
           <button class="btn btn-dir" type="button">從飯店導航</button>
           <button class="btn btn-map" type="button">在地圖上搜尋</button>
+          <button class="btn btn-map-preview btn-secondary" type="button">地圖預覽</button>
           <button class="btn btn-photo" type="button">📷 新增圖片</button>
           <button class="btn btn-drag btn-secondary" type="button">⋮⋮ 拖拉調整順序</button>
         </div>
@@ -349,13 +404,18 @@
       </div>
     </section>
 
-    <!-- Day 2 -->
-    <section id="day-2" data-date="5/21">
-      <div class="day-title editable-block" contenteditable="true">Day 2（5/21）</div>
+    <!-- Day 2（空白範例） -->
+    <section id="day-2" data-date="5/9">
+      <div class="day-title" contenteditable="true">Day 2（5/9）</div>
 
-      <div class="expense-card editable-block" contenteditable="true">
-        <div class="expense-title">當日備註／花費</div>
-        <div>今天的行程內容請在下方新增行程卡片，或貼上舊檔內容。</div>
+      <div class="expense-card">
+        <div class="expense-header">
+          <div class="expense-title" contenteditable="true">當日備註／花費</div>
+          <button class="expense-photo-btn btn" type="button">📷</button>
+        </div>
+        <div class="expense-body" contenteditable="true">
+例：餐飲 xxx 元，交通 xxx 元，購物 xxx 元，其他心得……</div>
+        <div class="expense-image-list"></div>
       </div>
 
       <div class="quick-add">
@@ -367,38 +427,44 @@
         </div>
       </div>
     </section>
+
+    <!-- 其他 Day3~5 可依照需要自行複製 section 結構，也可用「新增一天」來生成 -->
   </main>
 
   <button id="btnUndo">↩ 回上一步</button>
 
   <script>
   (function () {
-    const STORAGE_KEY = "nijiTrip2026_v15";
+    const STORAGE_KEY = "nijiTrip2026_v16";
     const UNDO_LIMIT = 25;
 
     let undoStack = [];
     let isRestoring = false;
     let saveTimer = null;
-    let currentPhotoCard = null;
-    let photoTargetType = "card"; // "card" | "note"
+    let currentPhotoHost = null; // 可能是 spot-card 或 expense-card
+    let photoTargetType = "card"; // "card" | "note" | "expense"
 
-    // ========== 儲存 / 還原 ==========
+    // ========= 狀態儲存 =========
     function getState() {
+      const header = document.querySelector("header");
       const nav = document.querySelector(".day-nav-row");
       const content = document.getElementById("content");
       return {
+        header: header ? header.innerHTML : "",
         nav: nav ? nav.innerHTML : "",
         content: content ? content.innerHTML : ""
       };
     }
 
     function setState(state) {
+      const header = document.querySelector("header");
       const nav = document.querySelector(".day-nav-row");
       const content = document.getElementById("content");
-      if (!nav || !content) return;
+      if (!nav || !content || !header) return;
       isRestoring = true;
-      nav.innerHTML = state.nav || "";
-      content.innerHTML = state.content || "";
+      if (state.header) header.innerHTML = state.header;
+      if (state.nav) nav.innerHTML = state.nav;
+      if (state.content) content.innerHTML = state.content;
       isRestoring = false;
       afterDomRebuild();
     }
@@ -447,22 +513,20 @@
 
     function undo() {
       if (undoStack.length <= 1) return;
-      undoStack.pop();               // 移除現在這一步
+      undoStack.pop();
       const prev = undoStack[undoStack.length - 1];
       setState(prev);
       localStorage.setItem(STORAGE_KEY, JSON.stringify(prev));
       updateUndoBtn();
     }
 
-    // ========== 日期處理 ==========
+    // ========= 日期處理 =========
     function parseDate(str) {
       const m = /(\d+)\s*\/\s*(\d+)/.exec(str || "");
       if (!m) return null;
       return new Date(2026, +m[1] - 1, +m[2]);
     }
-    function formatDate(d) {
-      return `${d.getMonth() + 1}/${d.getDate()}`;
-    }
+    function formatDate(d) { return `${d.getMonth() + 1}/${d.getDate()}`; }
     function addOneDayStr(str) {
       const d = parseDate(str);
       if (!d) return "";
@@ -470,27 +534,25 @@
       return formatDate(d);
     }
 
-    // 依 Day chip 重新整理 dayN 與 section id / title / data-date
     function renumberDays() {
       const nav = document.querySelector(".day-nav-row");
       const content = document.getElementById("content");
       if (!nav || !content) return;
 
       const chips = [...nav.querySelectorAll(".day-chip")];
-      const secs = [...content.querySelectorAll("section[id^='day-']")];
+      const secs  = [...content.querySelectorAll("section[id^='day-']")];
 
       chips.forEach((chip, i) => {
         const sec = secs[i];
         if (!sec) return;
         const dayNum = i + 1;
-        const sub = chip.querySelector(".day-chip-sub");
         const main = chip.querySelector(".day-chip-main");
+        const sub  = chip.querySelector(".day-chip-sub");
         const dateText = sub ? sub.textContent.trim() : "";
 
         chip.href = `#day-${dayNum}`;
         chip.dataset.dayId = `day-${dayNum}`;
-
-        if (sec.id !== `day-${dayNum}`) sec.id = `day-${dayNum}`;
+        sec.id = `day-${dayNum}`;
         if (dateText) sec.setAttribute("data-date", dateText);
 
         if (main) main.textContent = `Day ${dayNum}`;
@@ -499,7 +561,6 @@
       });
     }
 
-    // 從 Day 1 的日期開始，後面自動 +1 天
     function autoFixDates() {
       const nav = document.querySelector(".day-nav-row");
       if (!nav) return;
@@ -517,24 +578,22 @@
       saveState(true);
     }
 
-    // ========== 新增 / 刪除 天 ==========
+    // ========= 新增 / 刪除 Day =========
     function addDay() {
       const nav = document.querySelector(".day-nav-row");
       const content = document.getElementById("content");
       if (!nav || !content) return;
 
       const chips = [...nav.querySelectorAll(".day-chip")];
-      const secs = [...content.querySelectorAll("section[id^='day-']")];
       const lastChip = chips[chips.length - 1];
       const lastDate = lastChip?.querySelector(".day-chip-sub")?.textContent.trim() || "";
-      const newDate = addOneDayStr(lastDate) || lastDate || "5/20";
-      const newNum = chips.length + 1;
+      const newDate = addOneDayStr(lastDate) || lastDate || "5/8";
+      const newNum  = chips.length + 1;
 
-      // Day chip
       const chip = document.createElement("a");
       chip.className = "day-chip";
-      chip.dataset.dayId = `day-${newNum}`;
       chip.href = `#day-${newNum}`;
+      chip.dataset.dayId = `day-${newNum}`;
       chip.setAttribute("draggable", "true");
       chip.innerHTML = `
         <span class="day-chip-main" contenteditable="true">Day ${newNum}</span>
@@ -542,15 +601,19 @@
       `;
       nav.appendChild(chip);
 
-      // 對應 section
       const sec = document.createElement("section");
       sec.id = `day-${newNum}`;
       sec.setAttribute("data-date", newDate);
       sec.innerHTML = `
-        <div class="day-title editable-block" contenteditable="true">Day ${newNum}（${newDate}）</div>
-        <div class="expense-card editable-block" contenteditable="true">
-          <div class="expense-title">當日備註／花費</div>
-          <div>今天的行程內容請在下方新增行程卡片，或貼上舊檔內容。</div>
+        <div class="day-title" contenteditable="true">Day ${newNum}（${newDate}）</div>
+        <div class="expense-card">
+          <div class="expense-header">
+            <div class="expense-title" contenteditable="true">當日備註／花費</div>
+            <button class="expense-photo-btn btn" type="button">📷</button>
+          </div>
+          <div class="expense-body" contenteditable="true">
+例：餐飲 xxx 元，交通 xxx 元，購物 xxx 元，其他心得……</div>
+          <div class="expense-image-list"></div>
         </div>
         <div class="quick-add">
           <div class="quick-add-title">＋ 新增行程卡片</div>
@@ -565,6 +628,7 @@
 
       attachDayDrag();
       attachCardEvents();
+      attachPhotoButtons();
       renumberDays();
       autoFixDates();
     }
@@ -575,32 +639,28 @@
       if (!nav || !content) return;
 
       const chips = [...nav.querySelectorAll(".day-chip")];
-      const secs = [...content.querySelectorAll("section[id^='day-']")];
+      const secs  = [...content.querySelectorAll("section[id^='day-']")];
       if (chips.length <= 1) {
         alert("至少要保留一天唷！");
         return;
       }
       chips[chips.length - 1].remove();
       secs[secs.length - 1].remove();
-
       renumberDays();
       saveState(true);
     }
 
-    // ========== 拖拉 Day chip ==========
+    // ========= 拖拉 Day =========
     function attachDayDrag() {
       const nav = document.querySelector(".day-nav-row");
       if (!nav) return;
-
-      [...nav.querySelectorAll(".day-chip")].forEach(chip => {
-        chip.setAttribute("draggable", "true");
-      });
+      [...nav.querySelectorAll(".day-chip")].forEach(chip => chip.setAttribute("draggable", "true"));
 
       let dragging = null;
 
       nav.onDragStartListener && nav.removeEventListener("dragstart", nav.onDragStartListener);
-      nav.onDragOverListener && nav.removeEventListener("dragover", nav.onDragOverListener);
-      nav.onDragEndListener && nav.removeEventListener("dragend", nav.onDragEndListener);
+      nav.onDragOverListener  && nav.removeEventListener("dragover", nav.onDragOverListener);
+      nav.onDragEndListener   && nav.removeEventListener("dragend", nav.onDragEndListener);
 
       nav.onDragStartListener = e => {
         const chip = e.target.closest(".day-chip");
@@ -643,7 +703,7 @@
       });
     }
 
-    // ========== 行程卡片相關 ==========
+    // ========= 行程卡片 =========
     function createSpotCard(zh, jp) {
       const card = document.createElement("div");
       card.className = "spot-card";
@@ -657,6 +717,7 @@
         <div class="btn-row">
           <button class="btn btn-dir" type="button">從飯店導航</button>
           <button class="btn btn-map" type="button">在地圖上搜尋</button>
+          <button class="btn btn-map-preview btn-secondary" type="button">地圖預覽</button>
           <button class="btn btn-photo" type="button">📷 新增圖片</button>
           <button class="btn btn-drag btn-secondary" type="button">⋮⋮ 拖拉調整順序</button>
         </div>
@@ -677,14 +738,14 @@
       const content = document.getElementById("content");
       if (!content) return;
 
-      // 快速新增行程卡片
+      // 快速新增卡片
       content.querySelectorAll(".quick-add .qa-btn").forEach(btn => {
         btn.onclick = () => {
-          const qa = btn.closest(".quick-add");
+          const qa  = btn.closest(".quick-add");
           const sec = btn.closest("section[id^='day-']");
           if (!qa || !sec) return;
           const nameInput = qa.querySelector(".qa-name");
-          const jpInput = qa.querySelector(".qa-jp");
+          const jpInput   = qa.querySelector(".qa-jp");
           const zh = nameInput.value.trim() || "新景點";
           const jp = jpInput.value.trim();
           const card = createSpotCard(zh, jp);
@@ -693,6 +754,7 @@
           jpInput.value = "";
           attachCardDrag();
           attachPhotoButtons();
+          attachMapButtons();
           scheduleSave();
         };
       });
@@ -702,7 +764,6 @@
       attachMapButtons();
     }
 
-    // 拖拉行程卡片
     function attachCardDrag() {
       const content = document.getElementById("content");
       if (!content) return;
@@ -713,8 +774,8 @@
       let draggingCard = null;
 
       content.onCardDragStart && content.removeEventListener("dragstart", content.onCardDragStart);
-      content.onCardDragOver && content.removeEventListener("dragover", content.onCardDragOver);
-      content.onCardDragEnd && content.removeEventListener("dragend", content.onCardDragEnd);
+      content.onCardDragOver  && content.removeEventListener("dragover", content.onCardDragOver);
+      content.onCardDragEnd   && content.removeEventListener("dragend", content.onCardDragEnd);
 
       content.onCardDragStart = e => {
         const card = e.target.closest(".spot-card");
@@ -744,7 +805,7 @@
       content.addEventListener("dragend", content.onCardDragEnd);
     }
 
-    // 地圖按鈕
+    // ========= 地圖按鈕 =========
     function attachMapButtons() {
       const content = document.getElementById("content");
       if (!content) return;
@@ -755,7 +816,19 @@
           if (!card) return;
           const zh = card.querySelector(".name-zh")?.textContent.trim() || "";
           const jp = card.querySelector(".name-ja")?.textContent.trim() || "";
-          const q = encodeURIComponent((jp || zh) || "景點");
+          const q  = encodeURIComponent((jp || zh) || "景點");
+          const url = "https://www.google.com/maps/search/?api=1&query=" + q;
+          window.open(url, "_blank");
+        };
+      });
+
+      content.querySelectorAll(".btn-map-preview").forEach(btn => {
+        btn.onclick = () => {
+          const card = btn.closest(".spot-card");
+          if (!card) return;
+          const zh = card.querySelector(".name-zh")?.textContent.trim() || "";
+          const jp = card.querySelector(".name-ja")?.textContent.trim() || "";
+          const q  = encodeURIComponent((jp || zh) || "景點");
           const url = "https://www.google.com/maps/search/?api=1&query=" + q;
           window.open(url, "_blank");
         };
@@ -767,36 +840,50 @@
           if (!card) return;
           const zh = card.querySelector(".name-zh")?.textContent.trim() || "";
           const jp = card.querySelector(".name-ja")?.textContent.trim() || "";
-          const q = encodeURIComponent("飯店 到 " + (jp || zh || "景點"));
+          const q  = encodeURIComponent("飯店 到 " + (jp || zh || "景點"));
           const url = "https://www.google.com/maps/search/?api=1&query=" + q;
           window.open(url, "_blank");
         };
       });
     }
 
-    // 照片按鈕
+    // ========= 照片按鈕 =========
     function attachPhotoButtons() {
       const content = document.getElementById("content");
       const photoInput = document.getElementById("photoInput");
       if (!content || !photoInput) return;
 
+      // 行程卡照片
       content.querySelectorAll(".btn-photo").forEach(btn => {
         btn.onclick = () => {
           const card = btn.closest(".spot-card");
           if (!card) return;
-          currentPhotoCard = card;
-          photoTargetType = "card";
+          currentPhotoHost = card;
+          photoTargetType  = "card";
           photoInput.value = "";
           photoInput.click();
         };
       });
 
+      // 備註照片
       content.querySelectorAll(".btn-note-photo").forEach(btn => {
         btn.onclick = () => {
           const card = btn.closest(".spot-card");
           if (!card) return;
-          currentPhotoCard = card;
-          photoTargetType = "note";
+          currentPhotoHost = card;
+          photoTargetType  = "note";
+          photoInput.value = "";
+          photoInput.click();
+        };
+      });
+
+      // 當日備註／花費 照片
+      content.querySelectorAll(".expense-photo-btn").forEach(btn => {
+        btn.onclick = () => {
+          const card = btn.closest(".expense-card");
+          if (!card) return;
+          currentPhotoHost = card;
+          photoTargetType  = "expense";
           photoInput.value = "";
           photoInput.click();
         };
@@ -804,34 +891,37 @@
 
       photoInput.onchange = () => {
         const file = photoInput.files && photoInput.files[0];
-        if (!file || !currentPhotoCard) return;
+        if (!file || !currentPhotoHost) return;
         const reader = new FileReader();
         reader.onload = e => {
           const url = e.target.result;
-          const list = photoTargetType === "note"
-            ? currentPhotoCard.querySelector(".note-image-list")
-            : currentPhotoCard.querySelector(".image-list");
+          let list = null;
+          if (photoTargetType === "card") {
+            list = currentPhotoHost.querySelector(".image-list");
+          } else if (photoTargetType === "note") {
+            list = currentPhotoHost.querySelector(".note-image-list");
+          } else if (photoTargetType === "expense") {
+            list = currentPhotoHost.querySelector(".expense-image-list");
+          }
           if (!list) return;
           const img = document.createElement("img");
           img.className = "spot-photo";
           img.src = url;
-          img.alt = "行程照片";
+          img.alt = "照片";
           list.appendChild(img);
-
           img.addEventListener("click", () => {
             if (confirm("刪除這張照片？")) {
               img.remove();
               scheduleSave();
             }
           });
-
           scheduleSave();
         };
         reader.readAsDataURL(file);
       };
     }
 
-    // ========== 匯出 / 匯入 ==========
+    // ========= 匯出 / 匯入 =========
     function attachBackupButtons() {
       const exportBtn = document.getElementById("btnExport");
       const importBtn = document.getElementById("btnImport");
@@ -885,30 +975,42 @@
       }
     }
 
-    // ========== DOM 重建後重新掛事件 ==========
+    // ========= DOM 重建後要重新掛的東西 =========
     function afterDomRebuild() {
-      // 編輯內容 → 自動存檔
+      const header = document.querySelector("header");
       const content = document.getElementById("content");
+
+      if (header) {
+        header.oninput = () => scheduleSave();
+      }
       if (content) {
         content.oninput = () => scheduleSave();
       }
+
+      // header 裡面的按鈕
+      const btnAddDay    = document.getElementById("btnAddDay");
+      const btnRemoveDay = document.getElementById("btnRemoveDay");
+      if (btnAddDay)    btnAddDay.onclick = addDay;
+      if (btnRemoveDay) btnRemoveDay.onclick = removeDay;
+
+      attachBackupButtons();
       attachDayDrag();
       watchDateEdit();
       attachCardEvents();
-      attachBackupButtons();
+      attachPhotoButtons();
+      attachMapButtons();
       renumberDays();
     }
 
-    // ========== 初始化 ==========
+    // ========= 初始化 =========
     document.addEventListener("DOMContentLoaded", () => {
       restoreFromLocal();
       afterDomRebuild();
 
-      document.getElementById("btnAddDay").onclick = addDay;
-      document.getElementById("btnRemoveDay").onclick = removeDay;
-      document.getElementById("btnUndo").onclick = undo;
+      const undoBtn = document.getElementById("btnUndo");
+      if (undoBtn) undoBtn.onclick = undo;
 
-      // 初次載入時也修正一次日期
+      // 先跑一次，以防第一次載入日期不連續
       autoFixDates();
     });
   })();
