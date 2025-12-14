@@ -1,0 +1,1232 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <title>Niji Trip 2026 · 暖色主題</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#ffd48d" />
+  <link rel="manifest" href="manifest.json" />
+  <style>
+    :root {
+      --bg-cream: #fff7ec;
+      --blue-soft: #a9e2ff;
+      --peach-soft: #ffb4a2;
+      --yellow-soft: #ffe08a;
+      --brown-main: #5a3b32;
+      --brown-soft: #7a5446;
+      --border-soft: #ead8c0;
+    }
+    * { box-sizing: border-box; }
+    body {
+      font-family: "Noto Sans TC", system-ui, sans-serif;
+      margin: 0;
+      color: var(--brown-main);
+      background:
+        radial-gradient(circle at 0% 0%, var(--blue-soft) 0, transparent 55%),
+        radial-gradient(circle at 100% 0%, var(--peach-soft) 0, transparent 55%),
+        radial-gradient(circle at 50% 110%, var(--yellow-soft) 0, transparent 60%),
+        var(--bg-cream);
+      min-height: 100vh;
+    }
+    header {
+      background: rgba(255, 247, 236, 0.9);
+      backdrop-filter: blur(8px);
+      color: var(--brown-main);
+      padding: 14px 16px 6px;
+      box-shadow: 0 2px 8px rgba(190, 150, 110, 0.35);
+      position: relative;
+      z-index: 5;
+    }
+    header h1 {
+      margin: 0;
+      font-size: 20px;
+      letter-spacing: 0.06em;
+    }
+    header p {
+      margin: 4px 0 0;
+      font-size: 12px;
+      opacity: 0.9;
+    }
+    header .hint {
+      margin: 4px 0 2px;
+      font-size: 11px;
+      opacity: 0.85;
+    }
+
+    .day-nav {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: rgba(255, 247, 236, 0.92);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid rgba(234, 216, 192, 0.9);
+    }
+    .day-nav-row {
+      display: flex;
+      overflow-x: auto;
+      gap: 6px;
+      padding: 6px 8px;
+      scrollbar-width: thin;
+    }
+    .day-nav-row::-webkit-scrollbar { height: 4px; }
+    .day-nav-row::-webkit-scrollbar-thumb {
+      background: linear-gradient(90deg, var(--blue-soft), var(--peach-soft));
+      border-radius: 999px;
+    }
+    .day-chip {
+      flex: 0 0 auto;
+      text-decoration: none;
+      color: var(--brown-main);
+      background: rgba(255, 253, 248, 0.95);
+      border-radius: 999px;
+      border: 1px solid rgba(234, 216, 192, 1);
+      padding: 4px 10px;
+      font-size: 11px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      min-width: 72px;
+      box-shadow: 0 1px 3px rgba(200, 170, 130, 0.35);
+    }
+    .day-chip-main { font-weight: 600; font-size: 12px; }
+    .day-chip-sub { font-size: 10px; opacity: 0.9; }
+
+    .container {
+      padding: 12px 14px 80px;
+      max-width: 860px;
+      margin: 0 auto;
+    }
+    .day-title {
+      background: rgba(255, 253, 248, 0.96);
+      padding: 8px 12px;
+      border-radius: 10px;
+      font-weight: 600;
+      margin-top: 14px;
+      box-shadow: 0 1px 4px rgba(200, 170, 130, 0.45);
+      border: 1px solid var(--border-soft);
+      font-size: 14px;
+    }
+
+    .spot-card {
+      background: #fffdfa;
+      border: 1px solid var(--border-soft);
+      border-radius: 12px;
+      padding: 10px 14px;
+      margin-top: 8px;
+      box-shadow: 0 1px 4px rgba(200, 170, 130, 0.4);
+      transition: transform 0.1s ease, box-shadow 0.1s ease, opacity 0.1s ease;
+    }
+    .spot-card.dragging {
+      opacity: 0.8;
+      box-shadow: 0 4px 10px rgba(150, 110, 80, 0.65);
+      transform: scale(1.01);
+    }
+    .lodging-card {
+      background: #fff4de;
+      border-style: dashed;
+    }
+    .spot-text { font-size: 13px; }
+    .spot-text .name-zh {
+      font-weight: 600;
+      font-size: 14px;
+      color: var(--brown-main);
+    }
+    .spot-text .name-ja {
+      color: #756455;
+      font-size: 13px;
+    }
+    .spot-meta {
+      font-size: 11px;
+      color: #8f7b6a;
+      margin-top: 3px;
+    }
+    .spot-photo {
+      display: block;
+      max-width: 100%;
+      border-radius: 10px;
+      margin-top: 8px;
+      border: 1px solid var(--border-soft);
+    }
+
+    .btn-row {
+      margin-top: 6px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      align-items: center;
+    }
+    .btn {
+      border: none;
+      border-radius: 999px;
+      padding: 5px 10px;
+      font-size: 11px;
+      cursor: pointer;
+      background: #ffd48d;
+      color: var(--brown-main);
+      box-shadow: 0 1px 4px rgba(190, 150, 110, 0.5);
+    }
+    .btn.secondary {
+      background: #fff7ec;
+      border: 1px solid var(--border-soft);
+      box-shadow: none;
+    }
+    .drag-handle {
+      font-size: 11px;
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: #ffe8bf;
+      border: 1px dashed var(--border-soft);
+      cursor: grab;
+      user-select: none;
+    }
+
+    .expense-card {
+      background: #fff7ec;
+      border: 1px dashed var(--border-soft);
+      border-radius: 12px;
+      padding: 8px 10px;
+      margin-top: 8px;
+      font-size: 12px;
+      color: var(--brown-soft);
+    }
+    .expense-title {
+      font-weight: 600;
+      margin-bottom: 4px;
+      font-size: 12px;
+      color: var(--brown-main);
+    }
+
+    .quick-add {
+      margin-top: 8px;
+      padding: 8px 10px;
+      border-radius: 10px;
+      background: rgba(255, 253, 248, 0.9);
+      border: 1px dashed var(--border-soft);
+      font-size: 11px;
+      color: var(--brown-soft);
+    }
+    .quick-add-title {
+      font-weight: 600;
+      margin-bottom: 4px;
+      color: var(--brown-main);
+    }
+    .quick-add-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 4px;
+    }
+    .quick-add-row input {
+      flex: 1 1 130px;
+      padding: 5px 8px;
+      border-radius: 999px;
+      border: 1px solid var(--border-soft);
+      font-size: 11px;
+      font-family: inherit;
+      color: var(--brown-main);
+      background: #fffdf7;
+    }
+    .quick-add-row button {
+      padding: 5px 10px;
+      border-radius: 999px;
+      border: none;
+      font-size: 11px;
+      background: #ffd48d;
+      color: var(--brown-main);
+      box-shadow: 0 1px 3px rgba(190, 150, 110, 0.5);
+      cursor: pointer;
+      flex: 0 0 auto;
+    }
+
+    .custom-section {
+      border-top: 1px dashed var(--border-soft);
+      margin-top: 20px;
+      padding-top: 10px;
+    }
+    .custom-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--brown-main);
+    }
+    .custom-placeholder {
+      border: 1px dashed var(--border-soft);
+      border-radius: 10px;
+      padding: 10px;
+      background: rgba(255, 253, 248, 0.95);
+      font-size: 12px;
+      color: var(--brown-soft);
+      margin-top: 6px;
+    }
+
+    .backup-section {
+      margin-top: 16px;
+      padding: 10px 12px 12px;
+      border-radius: 12px;
+      background: rgba(255, 253, 248, 0.96);
+      border: 1px solid var(--border-soft);
+      box-shadow: 0 1px 4px rgba(200, 170, 130, 0.35);
+      font-size: 12px;
+      color: var(--brown-soft);
+    }
+    .backup-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--brown-main);
+      margin-bottom: 4px;
+    }
+    .backup-row {
+      margin-top: 6px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+    }
+    .backup-btn {
+      font-size: 11px;
+    }
+    .backup-import-label {
+      font-size: 11px;
+      border-radius: 999px;
+      padding: 5px 10px;
+      background: #fff7ec;
+      border: 1px solid var(--border-soft);
+      color: var(--brown-main);
+      cursor: pointer;
+      box-shadow: 0 1px 3px rgba(190, 150, 110, 0.4);
+    }
+    .backup-import-label input { display: none; }
+
+    .editable-block { outline: none; }
+    .editable-block:focus-within {
+      box-shadow: 0 0 0 2px rgba(255, 212, 141, 0.9);
+      border-color: #ffd48d;
+    }
+
+    .save-indicator {
+      position: fixed;
+      right: 16px;
+      bottom: 76px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba(90, 59, 50, 0.95);
+      color: #fffdf7;
+      font-size: 11px;
+      opacity: 0;
+      transition: opacity 0.25s ease;
+      box-shadow: 0 2px 6px rgba(120, 90, 70, 0.7);
+      z-index: 40;
+    }
+    .save-indicator.visible { opacity: 1; }
+
+    .undo-btn {
+      position: fixed;
+      right: 16px;
+      bottom: 20px;
+      z-index: 50;
+      border-radius: 999px;
+      border: none;
+      padding: 10px 14px;
+      font-size: 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: #ffd48d;
+      color: var(--brown-main);
+      box-shadow: 0 3px 8px rgba(150, 110, 80, 0.65);
+      cursor: pointer;
+    }
+    .undo-btn[disabled] {
+      opacity: 0.5;
+      box-shadow: none;
+      cursor: default;
+    }
+
+    .map-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.45);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 60;
+    }
+    .map-overlay.visible { display: flex; }
+    .map-overlay-content {
+      background: #fffdf7;
+      border-radius: 16px;
+      width: 90%;
+      max-width: 480px;
+      height: 70%;
+      box-shadow: 0 4px 12px rgba(40,20,10,0.6);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    .map-overlay-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 6px 10px;
+      border-bottom: 1px solid var(--border-soft);
+      font-size: 13px;
+      color: var(--brown-main);
+    }
+    .map-close {
+      border: none;
+      background: transparent;
+      font-size: 18px;
+      cursor: pointer;
+      color: var(--brown-main);
+    }
+    .map-frame {
+      border: 0;
+      width: 100%;
+      height: 100%;
+    }
+  </style>
+</head>
+<body>
+<header>
+  <h1>Niji Trip 2026</h1>
+  <p>東京行程 · 暖色主題 · 拖拉排序＋住宿＋圖片＋雲端備份</p>
+  <div class="hint">✏️ 每張行程卡可拖拉排序、加入圖片、開啟地圖預覽。資料會自動儲存，也可以匯出 JSON 上傳雲端。</div>
+</header>
+
+<div class="day-nav">
+  <div class="day-nav-row">
+
+    <a class="day-chip" href="#day-1"><span class="day-chip-main">Day 1</span><span class="day-chip-sub">5/8</span></a>
+    <a class="day-chip" href="#day-2"><span class="day-chip-main">Day 2</span><span class="day-chip-sub">5/9</span></a>
+    <a class="day-chip" href="#day-3"><span class="day-chip-main">Day 3</span><span class="day-chip-sub">5/10</span></a>
+    <a class="day-chip" href="#day-4"><span class="day-chip-main">Day 4</span><span class="day-chip-sub">5/11</span></a>
+    <a class="day-chip" href="#day-5"><span class="day-chip-main">Day 5</span><span class="day-chip-sub">5/12</span></a>
+    <a class="day-chip" href="#day-6"><span class="day-chip-main">Day 6</span><span class="day-chip-sub">5/13</span></a>
+    <a class="day-chip" href="#day-7"><span class="day-chip-main">Day 7</span><span class="day-chip-sub">5/14</span></a>
+    <a class="day-chip" href="#day-8"><span class="day-chip-main">Day 8</span><span class="day-chip-sub">5/15</span></a>
+    <a class="day-chip" href="#day-9"><span class="day-chip-main">Day 9</span><span class="day-chip-sub">5/16</span></a>
+    <a class="day-chip" href="#day-10"><span class="day-chip-main">Day 10</span><span class="day-chip-sub">5/17</span></a>
+    <a class="day-chip" href="#day-11"><span class="day-chip-main">Day 11</span><span class="day-chip-sub">5/18</span></a>
+    <a class="day-chip" href="#day-12"><span class="day-chip-main">Day 12</span><span class="day-chip-sub">5/19</span></a>
+    <a class="day-chip" href="#day-13"><span class="day-chip-main">Day 13</span><span class="day-chip-sub">5/20</span></a>
+    <a class="day-chip" href="#day-14"><span class="day-chip-main">Day 14</span><span class="day-chip-sub">5/21</span></a>
+  </div>
+</div>
+
+<div class="container" id="content">
+  <section id="day-1" data-date="5/8">
+    <div class="day-title editable-block" contenteditable="true">Day 1 （5/8）</div>
+
+    <div class="spot-card editable-block" contenteditable="true">
+      <div class="spot-text">
+        <div class="name-zh">成田機場</div>
+        <div class="name-ja">成田空港</div>
+        <div class="spot-meta">成田・上野 · 抵達日本</div>
+      </div>
+      <div class="btn-row" contenteditable="false">
+        <button class="btn btn-dir" data-dest-jp="成田空港" contenteditable="false">從飯店導航</button>
+        <button class="btn secondary btn-search" data-dest-jp="成田空港" contenteditable="false">在地圖上搜尋</button>
+        <button class="btn secondary btn-preview" data-dest-jp="成田空港" contenteditable="false">地圖預覽</button>
+        <button class="btn secondary btn-photo" contenteditable="false">📷 新增圖片</button>
+        <span class="drag-handle" draggable="true" contenteditable="false">⠿ 拖拉調整順序</span>
+      </div>
+    </div>
+
+    <div class="spot-card lodging-card editable-block" contenteditable="true">
+      <div class="spot-text">
+        <div class="name-zh">住宿：VESSEL INN 上野入谷站 飯店</div>
+        <div class="name-ja">ベッセルイン上野入谷駅前</div>
+        <div class="spot-meta">上野・入谷 · 住宿地點</div>
+      </div>
+      <div class="btn-row" contenteditable="false">
+        <button class="btn btn-dir" data-dest-jp="ベッセルイン上野入谷駅前" contenteditable="false">從飯店導航</button>
+        <button class="btn secondary btn-search" data-dest-jp="ベッセルイン上野入谷駅前" contenteditable="false">在地圖上搜尋</button>
+        <button class="btn secondary btn-preview" data-dest-jp="ベッセルイン上野入谷駅前" contenteditable="false">地圖預覽</button>
+        <button class="btn secondary btn-photo" contenteditable="false">📷 新增圖片</button>
+        <span class="drag-handle" draggable="true" contenteditable="false">⠿ 拖拉調整順序</span>
+      </div>
+    </div>
+
+    <div class="expense-card editable-block" contenteditable="true">
+      <div class="expense-title">當日備註／花費</div>
+      <div>例：餐飲 xxx 元、交通 xxx 元、購物 xxx 元、其他心得……</div>
+    </div>
+
+    <div class="quick-add">
+      <div class="quick-add-title">＋ 新增行程卡片</div>
+      <div class="quick-add-row">
+        <input type="text" class="qa-name" placeholder="地點名稱（中文）" />
+        <input type="text" class="qa-jp" placeholder="日文名稱或地址" />
+        <button type="button" class="qa-btn" onclick="addSpot(this)">新增</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="day-2" data-date="5/9">
+    <div class="day-title editable-block" contenteditable="true">Day 2 （5/9）</div>
+
+    <div class="spot-card lodging-card editable-block" contenteditable="true">
+      <div class="spot-text">
+        <div class="name-zh">住宿：VESSEL INN 上野入谷站 飯店</div>
+        <div class="name-ja">ベッセルイン上野入谷駅前</div>
+        <div class="spot-meta">上野・入谷 · 住宿地點</div>
+      </div>
+      <div class="btn-row" contenteditable="false">
+        <button class="btn btn-dir" data-dest-jp="ベッセルイン上野入谷駅前" contenteditable="false">從飯店導航</button>
+        <button class="btn secondary btn-search" data-dest-jp="ベッセルイン上野入谷駅前" contenteditable="false">在地圖上搜尋</button>
+        <button class="btn secondary btn-preview" data-dest-jp="ベッセルイン上野入谷駅前" contenteditable="false">地圖預覽</button>
+        <button class="btn secondary btn-photo" contenteditable="false">📷 新增圖片</button>
+        <span class="drag-handle" draggable="true" contenteditable="false">⠿ 拖拉調整順序</span>
+      </div>
+    </div>
+
+    <div class="expense-card editable-block" contenteditable="true">
+      <div class="expense-title">當日備註／花費</div>
+      <div>例：餐飲 xxx 元、交通 xxx 元、購物 xxx 元、其他心得……</div>
+    </div>
+
+    <div class="quick-add">
+      <div class="quick-add-title">＋ 新增行程卡片</div>
+      <div class="quick-add-row">
+        <input type="text" class="qa-name" placeholder="地點名稱（中文）" />
+        <input type="text" class="qa-jp" placeholder="日文名稱或地址" />
+        <button type="button" class="qa-btn" onclick="addSpot(this)">新增</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="day-3" data-date="5/10">
+    <div class="day-title editable-block" contenteditable="true">Day 3 （5/10）</div>
+
+    <div class="spot-card lodging-card editable-block" contenteditable="true">
+      <div class="spot-text">
+        <div class="name-zh">住宿：VESSEL INN 上野入谷站 飯店</div>
+        <div class="name-ja">ベッセルイン上野入谷駅前</div>
+        <div class="spot-meta">上野・入谷 · 住宿地點</div>
+      </div>
+      <div class="btn-row" contenteditable="false">
+        <button class="btn btn-dir" data-dest-jp="ベッセルイン上野入谷駅前" contenteditable="false">從飯店導航</button>
+        <button class="btn secondary btn-search" data-dest-jp="ベッセルイン上野入谷駅前" contenteditable="false">在地圖上搜尋</button>
+        <button class="btn secondary btn-preview" data-dest-jp="ベッセルイン上野入谷駅前" contenteditable="false">地圖預覽</button>
+        <button class="btn secondary btn-photo" contenteditable="false">📷 新增圖片</button>
+        <span class="drag-handle" draggable="true" contenteditable="false">⠿ 拖拉調整順序</span>
+      </div>
+    </div>
+
+    <div class="expense-card editable-block" contenteditable="true">
+      <div class="expense-title">當日備註／花費</div>
+      <div>例：餐飲 xxx 元、交通 xxx 元、購物 xxx 元、其他心得……</div>
+    </div>
+
+    <div class="quick-add">
+      <div class="quick-add-title">＋ 新增行程卡片</div>
+      <div class="quick-add-row">
+        <input type="text" class="qa-name" placeholder="地點名稱（中文）" />
+        <input type="text" class="qa-jp" placeholder="日文名稱或地址" />
+        <button type="button" class="qa-btn" onclick="addSpot(this)">新增</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="day-4" data-date="5/11">
+    <div class="day-title editable-block" contenteditable="true">Day 4 （5/11）</div>
+
+    <div class="spot-card lodging-card editable-block" contenteditable="true">
+      <div class="spot-text">
+        <div class="name-zh">住宿：VESSEL INN 上野入谷站 飯店</div>
+        <div class="name-ja">ベッセルイン上野入谷駅前</div>
+        <div class="spot-meta">上野・入谷 · 住宿地點</div>
+      </div>
+      <div class="btn-row" contenteditable="false">
+        <button class="btn btn-dir" data-dest-jp="ベッセルイン上野入谷駅前" contenteditable="false">從飯店導航</button>
+        <button class="btn secondary btn-search" data-dest-jp="ベッセルイン上野入谷駅前" contenteditable="false">在地圖上搜尋</button>
+        <button class="btn secondary btn-preview" data-dest-jp="ベッセルイン上野入谷駅前" contenteditable="false">地圖預覽</button>
+        <button class="btn secondary btn-photo" contenteditable="false">📷 新增圖片</button>
+        <span class="drag-handle" draggable="true" contenteditable="false">⠿ 拖拉調整順序</span>
+      </div>
+    </div>
+
+    <div class="expense-card editable-block" contenteditable="true">
+      <div class="expense-title">當日備註／花費</div>
+      <div>例：餐飲 xxx 元、交通 xxx 元、購物 xxx 元、其他心得……</div>
+    </div>
+
+    <div class="quick-add">
+      <div class="quick-add-title">＋ 新增行程卡片</div>
+      <div class="quick-add-row">
+        <input type="text" class="qa-name" placeholder="地點名稱（中文）" />
+        <input type="text" class="qa-jp" placeholder="日文名稱或地址" />
+        <button type="button" class="qa-btn" onclick="addSpot(this)">新增</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="day-5" data-date="5/12">
+    <div class="day-title editable-block" contenteditable="true">Day 5 （5/12）</div>
+
+    <div class="spot-card lodging-card editable-block" contenteditable="true">
+      <div class="spot-text">
+        <div class="name-zh">住宿：VESSEL INN 上野入谷站 飯店</div>
+        <div class="name-ja">ベッセルイン上野入谷駅前</div>
+        <div class="spot-meta">上野・入谷 · 住宿地點</div>
+      </div>
+      <div class="btn-row" contenteditable="false">
+        <button class="btn btn-dir" data-dest-jp="ベッセルイン上野入谷駅前" contenteditable="false">從飯店導航</button>
+        <button class="btn secondary btn-search" data-dest-jp="ベッセルイン上野入谷駅前" contenteditable="false">在地圖上搜尋</button>
+        <button class="btn secondary btn-preview" data-dest-jp="ベッセルイン上野入谷駅前" contenteditable="false">地圖預覽</button>
+        <button class="btn secondary btn-photo" contenteditable="false">📷 新增圖片</button>
+        <span class="drag-handle" draggable="true" contenteditable="false">⠿ 拖拉調整順序</span>
+      </div>
+    </div>
+
+    <div class="expense-card editable-block" contenteditable="true">
+      <div class="expense-title">當日備註／花費</div>
+      <div>例：餐飲 xxx 元、交通 xxx 元、購物 xxx 元、其他心得……</div>
+    </div>
+
+    <div class="quick-add">
+      <div class="quick-add-title">＋ 新增行程卡片</div>
+      <div class="quick-add-row">
+        <input type="text" class="qa-name" placeholder="地點名稱（中文）" />
+        <input type="text" class="qa-jp" placeholder="日文名稱或地址" />
+        <button type="button" class="qa-btn" onclick="addSpot(this)">新增</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="day-6" data-date="5/13">
+    <div class="day-title editable-block" contenteditable="true">Day 6 （5/13）</div>
+
+    <div class="spot-card lodging-card editable-block" contenteditable="true">
+      <div class="spot-text">
+        <div class="name-zh">住宿：VESSEL INN 上野入谷站 飯店</div>
+        <div class="name-ja">ベッセルイン上野入谷駅前</div>
+        <div class="spot-meta">上野・入谷 · 住宿地點</div>
+      </div>
+      <div class="btn-row" contenteditable="false">
+        <button class="btn btn-dir" data-dest-jp="ベッセルイン上野入谷駅前" contenteditable="false">從飯店導航</button>
+        <button class="btn secondary btn-search" data-dest-jp="ベッセルイン上野入谷駅前" contenteditable="false">在地圖上搜尋</button>
+        <button class="btn secondary btn-preview" data-dest-jp="ベッセルイン上野入谷駅前" contenteditable="false">地圖預覽</button>
+        <button class="btn secondary btn-photo" contenteditable="false">📷 新增圖片</button>
+        <span class="drag-handle" draggable="true" contenteditable="false">⠿ 拖拉調整順序</span>
+      </div>
+    </div>
+
+    <div class="expense-card editable-block" contenteditable="true">
+      <div class="expense-title">當日備註／花費</div>
+      <div>例：餐飲 xxx 元、交通 xxx 元、購物 xxx 元、其他心得……</div>
+    </div>
+
+    <div class="quick-add">
+      <div class="quick-add-title">＋ 新增行程卡片</div>
+      <div class="quick-add-row">
+        <input type="text" class="qa-name" placeholder="地點名稱（中文）" />
+        <input type="text" class="qa-jp" placeholder="日文名稱或地址" />
+        <button type="button" class="qa-btn" onclick="addSpot(this)">新增</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="day-7" data-date="5/14">
+    <div class="day-title editable-block" contenteditable="true">Day 7 （5/14）</div>
+
+    <div class="spot-card lodging-card editable-block" contenteditable="true">
+      <div class="spot-text">
+        <div class="name-zh">住宿：VESSEL INN 上野入谷站 飯店</div>
+        <div class="name-ja">ベッセルイン上野入谷駅前</div>
+        <div class="spot-meta">上野・入谷 · 住宿地點</div>
+      </div>
+      <div class="btn-row" contenteditable="false">
+        <button class="btn btn-dir" data-dest-jp="ベッセルイン上野入谷駅前" contenteditable="false">從飯店導航</button>
+        <button class="btn secondary btn-search" data-dest-jp="ベッセルイン上野入谷駅前" contenteditable="false">在地圖上搜尋</button>
+        <button class="btn secondary btn-preview" data-dest-jp="ベッセルイン上野入谷駅前" contenteditable="false">地圖預覽</button>
+        <button class="btn secondary btn-photo" contenteditable="false">📷 新增圖片</button>
+        <span class="drag-handle" draggable="true" contenteditable="false">⠿ 拖拉調整順序</span>
+      </div>
+    </div>
+
+    <div class="expense-card editable-block" contenteditable="true">
+      <div class="expense-title">當日備註／花費</div>
+      <div>例：餐飲 xxx 元、交通 xxx 元、購物 xxx 元、其他心得……</div>
+    </div>
+
+    <div class="quick-add">
+      <div class="quick-add-title">＋ 新增行程卡片</div>
+      <div class="quick-add-row">
+        <input type="text" class="qa-name" placeholder="地點名稱（中文）" />
+        <input type="text" class="qa-jp" placeholder="日文名稱或地址" />
+        <button type="button" class="qa-btn" onclick="addSpot(this)">新增</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="day-8" data-date="5/15">
+    <div class="day-title editable-block" contenteditable="true">Day 8 （5/15）</div>
+
+    <div class="spot-card lodging-card editable-block" contenteditable="true">
+      <div class="spot-text">
+        <div class="name-zh">住宿：VESSEL INN 上野入谷站 飯店</div>
+        <div class="name-ja">ベッセルイン上野入谷駅前</div>
+        <div class="spot-meta">上野・入谷 · 住宿地點</div>
+      </div>
+      <div class="btn-row" contenteditable="false">
+        <button class="btn btn-dir" data-dest-jp="ベッセルイン上野入谷駅前" contenteditable="false">從飯店導航</button>
+        <button class="btn secondary btn-search" data-dest-jp="ベッセルイン上野入谷駅前" contenteditable="false">在地圖上搜尋</button>
+        <button class="btn secondary btn-preview" data-dest-jp="ベッセルイン上野入谷駅前" contenteditable="false">地圖預覽</button>
+        <button class="btn secondary btn-photo" contenteditable="false">📷 新增圖片</button>
+        <span class="drag-handle" draggable="true" contenteditable="false">⠿ 拖拉調整順序</span>
+      </div>
+    </div>
+
+    <div class="expense-card editable-block" contenteditable="true">
+      <div class="expense-title">當日備註／花費</div>
+      <div>例：餐飲 xxx 元、交通 xxx 元、購物 xxx 元、其他心得……</div>
+    </div>
+
+    <div class="quick-add">
+      <div class="quick-add-title">＋ 新增行程卡片</div>
+      <div class="quick-add-row">
+        <input type="text" class="qa-name" placeholder="地點名稱（中文）" />
+        <input type="text" class="qa-jp" placeholder="日文名稱或地址" />
+        <button type="button" class="qa-btn" onclick="addSpot(this)">新增</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="day-9" data-date="5/16">
+    <div class="day-title editable-block" contenteditable="true">Day 9 （5/16）</div>
+
+    <div class="spot-card lodging-card editable-block" contenteditable="true">
+      <div class="spot-text">
+        <div class="name-zh">住宿：VESSEL INN 上野入谷站 飯店</div>
+        <div class="name-ja">ベッセルイン上野入谷駅前</div>
+        <div class="spot-meta">上野・入谷 · 住宿地點</div>
+      </div>
+      <div class="btn-row" contenteditable="false">
+        <button class="btn btn-dir" data-dest-jp="ベッセルイン上野入谷駅前" contenteditable="false">從飯店導航</button>
+        <button class="btn secondary btn-search" data-dest-jp="ベッセルイン上野入谷駅前" contenteditable="false">在地圖上搜尋</button>
+        <button class="btn secondary btn-preview" data-dest-jp="ベッセルイン上野入谷駅前" contenteditable="false">地圖預覽</button>
+        <button class="btn secondary btn-photo" contenteditable="false">📷 新增圖片</button>
+        <span class="drag-handle" draggable="true" contenteditable="false">⠿ 拖拉調整順序</span>
+      </div>
+    </div>
+
+    <div class="expense-card editable-block" contenteditable="true">
+      <div class="expense-title">當日備註／花費</div>
+      <div>例：餐飲 xxx 元、交通 xxx 元、購物 xxx 元、其他心得……</div>
+    </div>
+
+    <div class="quick-add">
+      <div class="quick-add-title">＋ 新增行程卡片</div>
+      <div class="quick-add-row">
+        <input type="text" class="qa-name" placeholder="地點名稱（中文）" />
+        <input type="text" class="qa-jp" placeholder="日文名稱或地址" />
+        <button type="button" class="qa-btn" onclick="addSpot(this)">新增</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="day-10" data-date="5/17">
+    <div class="day-title editable-block" contenteditable="true">Day 10 （5/17）</div>
+
+    <div class="spot-card lodging-card editable-block" contenteditable="true">
+      <div class="spot-text">
+        <div class="name-zh">住宿：VESSEL INN 上野入谷站 飯店</div>
+        <div class="name-ja">ベッセルイン上野入谷駅前</div>
+        <div class="spot-meta">上野・入谷 · 住宿地點</div>
+      </div>
+      <div class="btn-row" contenteditable="false">
+        <button class="btn btn-dir" data-dest-jp="ベッセルイン上野入谷駅前" contenteditable="false">從飯店導航</button>
+        <button class="btn secondary btn-search" data-dest-jp="ベッセルイン上野入谷駅前" contenteditable="false">在地圖上搜尋</button>
+        <button class="btn secondary btn-preview" data-dest-jp="ベッセルイン上野入谷駅前" contenteditable="false">地圖預覽</button>
+        <button class="btn secondary btn-photo" contenteditable="false">📷 新增圖片</button>
+        <span class="drag-handle" draggable="true" contenteditable="false">⠿ 拖拉調整順序</span>
+      </div>
+    </div>
+
+    <div class="expense-card editable-block" contenteditable="true">
+      <div class="expense-title">當日備註／花費</div>
+      <div>例：餐飲 xxx 元、交通 xxx 元、購物 xxx 元、其他心得……</div>
+    </div>
+
+    <div class="quick-add">
+      <div class="quick-add-title">＋ 新增行程卡片</div>
+      <div class="quick-add-row">
+        <input type="text" class="qa-name" placeholder="地點名稱（中文）" />
+        <input type="text" class="qa-jp" placeholder="日文名稱或地址" />
+        <button type="button" class="qa-btn" onclick="addSpot(this)">新增</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="day-11" data-date="5/18">
+    <div class="day-title editable-block" contenteditable="true">Day 11 （5/18）</div>
+
+    <div class="spot-card lodging-card editable-block" contenteditable="true">
+      <div class="spot-text">
+        <div class="name-zh">住宿：VESSEL INN 上野入谷站 飯店</div>
+        <div class="name-ja">ベッセルイン上野入谷駅前</div>
+        <div class="spot-meta">上野・入谷 · 住宿地點</div>
+      </div>
+      <div class="btn-row" contenteditable="false">
+        <button class="btn btn-dir" data-dest-jp="ベッセルイン上野入谷駅前" contenteditable="false">從飯店導航</button>
+        <button class="btn secondary btn-search" data-dest-jp="ベッセルイン上野入谷駅前" contenteditable="false">在地圖上搜尋</button>
+        <button class="btn secondary btn-preview" data-dest-jp="ベッセルイン上野入谷駅前" contenteditable="false">地圖預覽</button>
+        <button class="btn secondary btn-photo" contenteditable="false">📷 新增圖片</button>
+        <span class="drag-handle" draggable="true" contenteditable="false">⠿ 拖拉調整順序</span>
+      </div>
+    </div>
+
+    <div class="expense-card editable-block" contenteditable="true">
+      <div class="expense-title">當日備註／花費</div>
+      <div>例：餐飲 xxx 元、交通 xxx 元、購物 xxx 元、其他心得……</div>
+    </div>
+
+    <div class="quick-add">
+      <div class="quick-add-title">＋ 新增行程卡片</div>
+      <div class="quick-add-row">
+        <input type="text" class="qa-name" placeholder="地點名稱（中文）" />
+        <input type="text" class="qa-jp" placeholder="日文名稱或地址" />
+        <button type="button" class="qa-btn" onclick="addSpot(this)">新增</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="day-12" data-date="5/19">
+    <div class="day-title editable-block" contenteditable="true">Day 12 （5/19）</div>
+
+    <div class="spot-card lodging-card editable-block" contenteditable="true">
+      <div class="spot-text">
+        <div class="name-zh">住宿：VESSEL INN 上野入谷站 飯店</div>
+        <div class="name-ja">ベッセルイン上野入谷駅前</div>
+        <div class="spot-meta">上野・入谷 · 住宿地點</div>
+      </div>
+      <div class="btn-row" contenteditable="false">
+        <button class="btn btn-dir" data-dest-jp="ベッセルイン上野入谷駅前" contenteditable="false">從飯店導航</button>
+        <button class="btn secondary btn-search" data-dest-jp="ベッセルイン上野入谷駅前" contenteditable="false">在地圖上搜尋</button>
+        <button class="btn secondary btn-preview" data-dest-jp="ベッセルイン上野入谷駅前" contenteditable="false">地圖預覽</button>
+        <button class="btn secondary btn-photo" contenteditable="false">📷 新增圖片</button>
+        <span class="drag-handle" draggable="true" contenteditable="false">⠿ 拖拉調整順序</span>
+      </div>
+    </div>
+
+    <div class="expense-card editable-block" contenteditable="true">
+      <div class="expense-title">當日備註／花費</div>
+      <div>例：餐飲 xxx 元、交通 xxx 元、購物 xxx 元、其他心得……</div>
+    </div>
+
+    <div class="quick-add">
+      <div class="quick-add-title">＋ 新增行程卡片</div>
+      <div class="quick-add-row">
+        <input type="text" class="qa-name" placeholder="地點名稱（中文）" />
+        <input type="text" class="qa-jp" placeholder="日文名稱或地址" />
+        <button type="button" class="qa-btn" onclick="addSpot(this)">新增</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="day-13" data-date="5/20">
+    <div class="day-title editable-block" contenteditable="true">Day 13 （5/20）</div>
+
+    <div class="spot-card lodging-card editable-block" contenteditable="true">
+      <div class="spot-text">
+        <div class="name-zh">住宿：VESSEL INN 上野入谷站 飯店</div>
+        <div class="name-ja">ベッセルイン上野入谷駅前</div>
+        <div class="spot-meta">上野・入谷 · 住宿地點</div>
+      </div>
+      <div class="btn-row" contenteditable="false">
+        <button class="btn btn-dir" data-dest-jp="ベッセルイン上野入谷駅前" contenteditable="false">從飯店導航</button>
+        <button class="btn secondary btn-search" data-dest-jp="ベッセルイン上野入谷駅前" contenteditable="false">在地圖上搜尋</button>
+        <button class="btn secondary btn-preview" data-dest-jp="ベッセルイン上野入谷駅前" contenteditable="false">地圖預覽</button>
+        <button class="btn secondary btn-photo" contenteditable="false">📷 新增圖片</button>
+        <span class="drag-handle" draggable="true" contenteditable="false">⠿ 拖拉調整順序</span>
+      </div>
+    </div>
+
+    <div class="expense-card editable-block" contenteditable="true">
+      <div class="expense-title">當日備註／花費</div>
+      <div>例：餐飲 xxx 元、交通 xxx 元、購物 xxx 元、其他心得……</div>
+    </div>
+
+    <div class="quick-add">
+      <div class="quick-add-title">＋ 新增行程卡片</div>
+      <div class="quick-add-row">
+        <input type="text" class="qa-name" placeholder="地點名稱（中文）" />
+        <input type="text" class="qa-jp" placeholder="日文名稱或地址" />
+        <button type="button" class="qa-btn" onclick="addSpot(this)">新增</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="day-14" data-date="5/21">
+    <div class="day-title editable-block" contenteditable="true">Day 14 （5/21）</div>
+
+    <div class="expense-card editable-block" contenteditable="true">
+      <div class="expense-title">當日備註／花費</div>
+      <div>例：餐飲 xxx 元、交通 xxx 元、購物 xxx 元、其他心得……</div>
+    </div>
+
+    <div class="quick-add">
+      <div class="quick-add-title">＋ 新增行程卡片</div>
+      <div class="quick-add-row">
+        <input type="text" class="qa-name" placeholder="地點名稱（中文）" />
+        <input type="text" class="qa-jp" placeholder="日文名稱或地址" />
+        <button type="button" class="qa-btn" onclick="addSpot(this)">新增</button>
+      </div>
+    </div>
+  </section>
+
+  <div class="custom-section editable-block" contenteditable="true">
+    <div class="custom-title">✏️ 其他補充記錄（預留空間）</div>
+    <div class="custom-placeholder">
+      可在這裡記錄整趟旅程總花費、回國後心得、想再去的店家清單等等。
+    </div>
+  </div>
+
+  <div class="backup-section">
+    <div class="backup-title">☁ 雲端備份</div>
+    <div>
+      App 會自動儲存在手機瀏覽器中；若想備份到雲端（Google Drive、Dropbox 等），可使用「匯出備份檔」下載 JSON 檔，再自行上傳。
+      之後如需回復，可以用「匯入備份檔」還原。
+    </div>
+    <div class="backup-row">
+      <button id="btnExport" class="btn backup-btn">匯出備份檔（JSON）</button>
+      <label class="backup-import-label">
+        匯入備份檔
+        <input type="file" id="backupInput" accept="application/json" />
+      </label>
+    </div>
+  </div>
+</div>
+
+<button class="undo-btn" id="undoBtn" disabled>🕘 回上一步</button>
+<div class="save-indicator" id="saveIndicator">已自動儲存</div>
+
+<div class="map-overlay" id="mapOverlay">
+  <div class="map-overlay-content">
+    <div class="map-overlay-header">
+      <span>地圖預覽</span>
+      <button class="map-close" id="mapClose">✕</button>
+    </div>
+    <iframe id="mapFrame" class="map-frame" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+  </div>
+</div>
+
+<input type="file" id="photoInput" accept="image/*" style="display:none" />
+
+<script>
+const STORAGE_KEY = "nijiTrip2026_v8";
+const MAX_HISTORY = 20;
+const HOTEL_JP = "ベッセルイン上野入谷駅前";
+
+const container = document.getElementById("content");
+const undoBtn = document.getElementById("undoBtn");
+const saveIndicator = document.getElementById("saveIndicator");
+const mapOverlay = document.getElementById("mapOverlay");
+const mapFrame = document.getElementById("mapFrame");
+const mapClose = document.getElementById("mapClose");
+const photoInput = document.getElementById("photoInput");
+const backupBtn = document.getElementById("btnExport");
+const backupInput = document.getElementById("backupInput");
+
+let historyStack = [];
+let saveTimer = null;
+let isRestoring = false;
+let draggedCard = null;
+let photoTargetCard = null;
+
+function buildSearchUrl(nameJp) {
+  return "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(nameJp);
+}
+function buildDirectionUrl(destinationJp) {
+  return "https://www.google.com/maps/dir/?api=1&origin=" +
+    encodeURIComponent(HOTEL_JP) +
+    "&destination=" + encodeURIComponent(destinationJp);
+}
+
+function pushHistory() {
+  const html = container.innerHTML;
+  if (historyStack.length >= MAX_HISTORY) historyStack.shift();
+  historyStack.push(html);
+  updateUndoButton();
+}
+function showSavedIndicator() {
+  saveIndicator.classList.add("visible");
+  setTimeout(() => saveIndicator.classList.remove("visible"), 1200);
+}
+function scheduleSave() {
+  if (isRestoring) return;
+  if (saveTimer) clearTimeout(saveTimer);
+  pushHistory();
+  saveTimer = setTimeout(() => {
+    try {
+      localStorage.setItem(STORAGE_KEY, container.innerHTML);
+      showSavedIndicator();
+    } catch (e) {
+      console.warn("無法儲存到 localStorage", e);
+    }
+  }, 400);
+}
+function attachEditHandlers() {
+  const blocks = container.querySelectorAll(".editable-block");
+  blocks.forEach(b => {
+    b.removeEventListener("input", scheduleSave);
+    b.addEventListener("input", scheduleSave);
+  });
+}
+function updateUndoButton() {
+  undoBtn.disabled = historyStack.length <= 1;
+}
+
+undoBtn.addEventListener("click", () => {
+  if (historyStack.length <= 1) return;
+  historyStack.pop();
+  const prev = historyStack[historyStack.length - 1];
+  isRestoring = true;
+  container.innerHTML = prev;
+  attachEditHandlers();
+  isRestoring = false;
+  try {
+    localStorage.setItem(STORAGE_KEY, container.innerHTML);
+  } catch (e) {
+    console.warn("無法儲存到 localStorage", e);
+  }
+  updateUndoButton();
+});
+
+function addSpot(btn) {
+  const section = btn.closest("section");
+  if (!section) return;
+  const nameInput = section.querySelector(".qa-name");
+  const jpInput = section.querySelector(".qa-jp");
+  if (!nameInput || !jpInput) return;
+  const name = nameInput.value.trim();
+  const jp = jpInput.value.trim();
+  if (!name || !jp) {
+    alert("請先輸入地點名稱和日文名稱／地址");
+    return;
+  }
+  const expenseCard = section.querySelector(".expense-card");
+  const card = document.createElement("div");
+  card.className = "spot-card editable-block";
+  card.setAttribute("contenteditable", "true");
+  card.innerHTML =
+    '<div class="spot-text">' +
+      '<div class="name-zh">' + name + '</div>' +
+      '<div class="name-ja">' + jp + '</div>' +
+      '<div class="spot-meta">自訂行程 · 手動新增</div>' +
+    '</div>' +
+    '<div class="btn-row" contenteditable="false">' +
+      '<button class="btn btn-dir" data-dest-jp="' + jp + '" contenteditable="false">從飯店導航</button>' +
+      '<button class="btn secondary btn-search" data-dest-jp="' + jp + '" contenteditable="false">在地圖上搜尋</button>' +
+      '<button class="btn secondary btn-preview" data-dest-jp="' + jp + '" contenteditable="false">地圖預覽</button>' +
+      '<button class="btn secondary btn-photo" contenteditable="false">📷 新增圖片</button>' +
+      '<span class="drag-handle" draggable="true" contenteditable="false">⠿ 拖拉調整順序</span>' +
+    '</div>';
+  section.insertBefore(card, expenseCard);
+  nameInput.value = "";
+  jpInput.value = "";
+  attachEditHandlers();
+  scheduleSave();
+}
+
+container.addEventListener("click", (e) => {
+  const dirBtn = e.target.closest(".btn-dir");
+  const searchBtn = e.target.closest(".btn-search");
+  const previewBtn = e.target.closest(".btn-preview");
+  const photoBtn = e.target.closest(".btn-photo");
+  const img = e.target.closest(".spot-photo");
+
+  if (dirBtn) {
+    const dest = dirBtn.getAttribute("data-dest-jp");
+    if (dest) window.open(buildDirectionUrl(dest), "_blank");
+    return;
+  }
+  if (searchBtn) {
+    const dest = searchBtn.getAttribute("data-dest-jp");
+    if (dest) window.open(buildSearchUrl(dest), "_blank");
+    return;
+  }
+  if (previewBtn) {
+    const dest = previewBtn.getAttribute("data-dest-jp");
+    if (dest) {
+      const url = "https://www.google.com/maps?q=" + encodeURIComponent(dest);
+      mapFrame.src = url;
+      mapOverlay.classList.add("visible");
+    }
+    return;
+  }
+  if (photoBtn) {
+    const card = photoBtn.closest(".spot-card");
+    if (!card) return;
+    photoTargetCard = card;
+    photoInput.click();
+    return;
+  }
+  if (img) {
+    if (confirm("要刪除這張圖片嗎？")) {
+      img.remove();
+      scheduleSave();
+    }
+    return;
+  }
+});
+
+photoInput.addEventListener("change", (e) => {
+  const file = e.target.files[0];
+  if (!file || !photoTargetCard) return;
+  const reader = new FileReader();
+  reader.onload = (ev) => {
+    const img = document.createElement("img");
+    img.className = "spot-photo";
+    img.src = ev.target.result;
+    photoTargetCard.appendChild(img);
+    attachEditHandlers();
+    scheduleSave();
+    photoTargetCard = null;
+  };
+  reader.readAsDataURL(file);
+  photoInput.value = "";
+});
+
+mapClose.addEventListener("click", () => {
+  mapOverlay.classList.remove("visible");
+  mapFrame.src = "";
+});
+mapOverlay.addEventListener("click", (e) => {
+  if (e.target === mapOverlay) {
+    mapOverlay.classList.remove("visible");
+    mapFrame.src = "";
+  }
+});
+
+container.addEventListener("dragstart", (e) => {
+  const handle = e.target.closest(".drag-handle");
+  if (!handle) return;
+  const card = handle.closest(".spot-card");
+  if (!card) return;
+  draggedCard = card;
+  draggedCard.classList.add("dragging");
+  if (e.dataTransfer) {
+    e.dataTransfer.effectAllowed = "move";
+    e.dataTransfer.setData("text/plain", "");
+  }
+});
+container.addEventListener("dragend", () => {
+  if (draggedCard) {
+    draggedCard.classList.remove("dragging");
+    draggedCard = null;
+    scheduleSave();
+  }
+});
+function getDragAfterElement(section, y) {
+  const cards = Array.from(section.querySelectorAll(".spot-card:not(.dragging)"));
+  let closest = null;
+  let closestOffset = Number.NEGATIVE_INFINITY;
+  cards.forEach(card => {
+    const rect = card.getBoundingClientRect();
+    const offset = y - (rect.top + rect.height / 2);
+    if (offset < 0 && offset > closestOffset) {
+      closestOffset = offset;
+      closest = card;
+    }
+  });
+  return closest;
+}
+container.addEventListener("dragover", (e) => {
+  if (!draggedCard) return;
+  const section = e.target.closest("section");
+  if (!section || !section.contains(draggedCard)) return;
+  e.preventDefault();
+  const afterElement = getDragAfterElement(section, e.clientY);
+  const expenseCard = section.querySelector(".expense-card");
+  if (!expenseCard) return;
+  if (afterElement == null) {
+    section.insertBefore(draggedCard, expenseCard);
+  } else {
+    section.insertBefore(draggedCard, afterElement);
+  }
+});
+
+function pad2(n) { return n.toString().padStart(2,"0"); }
+
+if (backupBtn) {
+  backupBtn.addEventListener("click", () => {
+    const now = new Date();
+    const data = {
+      version: "nijiTrip2026-v8",
+      savedAt: now.toISOString(),
+      content: container.innerHTML
+    };
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    const fileName = `NijiTrip2026_backup_${now.getFullYear()}${pad2(now.getMonth()+1)}${pad2(now.getDate())}.json`;
+    a.href = url;
+    a.download = fileName;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  });
+}
+
+if (backupInput) {
+  backupInput.addEventListener("change", (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      try {
+        const data = JSON.parse(ev.target.result);
+        if (!data.content) {
+          alert("備份檔格式不正確。");
+          return;
+        }
+        if (!confirm("確定要用備份檔覆蓋目前的行程嗎？")) return;
+        isRestoring = true;
+        container.innerHTML = data.content;
+        attachEditHandlers();
+        historyStack = [container.innerHTML];
+        updateUndoButton();
+        try {
+          localStorage.setItem(STORAGE_KEY, container.innerHTML);
+        } catch (e) {
+          console.warn("無法儲存到 localStorage", e);
+        }
+        isRestoring = false;
+        showSavedIndicator();
+      } catch (err) {
+        console.error(err);
+        alert("讀取備份檔失敗，檔案可能已損壞。");
+      }
+    };
+    reader.readAsText(file, "utf-8");
+    backupInput.value = "";
+  });
+}
+
+(function init() {
+  let saved = null;
+  try {
+    saved = localStorage.getItem(STORAGE_KEY);
+  } catch (e) {
+    console.warn("讀取 localStorage 失敗", e);
+  }
+  if (saved && saved.length > 0) {
+    container.innerHTML = saved;
+  }
+  attachEditHandlers();
+  historyStack = [container.innerHTML];
+  updateUndoButton();
+})();
+
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", function() {
+    navigator.serviceWorker.register("sw.js").catch(function(err) {
+      console.log("SW registration failed:", err);
+    });
+  });
+}
+</script>
+</body>
+</html>
