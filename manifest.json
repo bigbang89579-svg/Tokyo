@@ -1,10 +1,11 @@
 {
   "name": "Niji Trip 2026",
   "short_name": "NijiTrip",
-  "start_url": ".",
+  "description": "東京行程：暖色主題＋拖拉排序＋住宿＋圖片＋地圖＋雲端備份",
+  "start_url": "./index.html",
   "display": "standalone",
-  "background_color": "#fff7ec",
-  "theme_color": "#ffd48d",
+  "background_color": "#FFF6EB",
+  "theme_color": "#F7C58A",
   "icons": [
     {
       "src": "icon-192.png",
