@@ -1,659 +1,917 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-  <meta charset="UTF-8" />
-  <title>2026 東京・NijiFes 行程表</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="UTF-8">
+  <title>Niji Trip 2026</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
     :root {
-      --bg: #f5f5fa;
-      --primary: #4f46e5;
-      --primary-soft: #eef2ff;
-      --accent: #f97316;
-      --card-bg: #ffffff;
-      --border: #e5e7eb;
-      --text-main: #111827;
-      --text-sub: #6b7280;
-      --tab-bg: #e5e7eb;
-      --tab-active: #ffffff;
+      --bg-main: #fff7e8;
+      --bg-card: #ffe7bd;
+      --bg-day: #f5fbff;
+      --bg-spot: #fffaf3;
+      --border-soft: #f0c48d;
+      --brown-main: #6d3b1f;
+      --brown-soft: #9c6a42;
+      --accent: #ffb64b;
     }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
-        sans-serif;
-    }
-
+    * { box-sizing: border-box; }
     body {
-      background: var(--bg);
-      color: var(--text-main);
-      padding: 16px;
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: linear-gradient(#ffe6b8, #ffeecd);
+      color: var(--brown-main);
     }
-
-    .container {
-      max-width: 1100px;
-      margin: 0 auto;
-    }
-
     header {
-      margin-bottom: 16px;
+      padding: 18px 16px 10px;
+      background: #ffe6b8;
     }
-
-    header h1 {
-      font-size: 1.6rem;
-      font-weight: 700;
-      margin-bottom: 6px;
+    h1 {
+      margin: 0;
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: 1px;
     }
-
     header p {
-      font-size: 0.9rem;
-      color: var(--text-sub);
+      margin: 4px 0 0;
+      line-height: 1.6;
+      font-size: 14px;
     }
-
-    .year-badge {
-      display: inline-flex;
+    .hint {
+      font-size: 13px;
+      margin-top: 8px;
+      display: flex;
       align-items: center;
       gap: 6px;
-      background: #facc15;
-      padding: 4px 10px;
-      border-radius: 999px;
-      font-size: 0.8rem;
-      font-weight: 600;
-      margin-top: 8px;
     }
-
-    /* Tabs */
-    .tabs {
+    .hint span {
+      font-size: 18px;
+    }
+    .top-btn-row {
+      margin-top: 12px;
       display: flex;
-      gap: 4px;
-      background: var(--tab-bg);
-      padding: 4px;
-      border-radius: 999px;
-      margin: 12px 0 18px;
-    }
-
-    .tab {
-      flex: 1;
-      text-align: center;
-      padding: 8px 12px;
-      border-radius: 999px;
-      font-size: 0.9rem;
-      cursor: pointer;
-      border: none;
-      background: transparent;
-      color: var(--text-sub);
-      font-weight: 500;
-      transition: all 0.18s ease;
-    }
-
-    .tab.active {
-      background: var(--tab-active);
-      color: var(--primary);
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
-    }
-
-    main {
-      background: var(--card-bg);
-      border-radius: 14px;
-      padding: 14px;
-      box-shadow: 0 10px 25px rgba(15, 23, 42, 0.08);
-    }
-
-    .tab-panel {
-      display: none;
-    }
-
-    .tab-panel.active {
-      display: block;
-    }
-
-    /* 行程表 */
-    .trip-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
       flex-wrap: wrap;
       gap: 8px;
-      margin-bottom: 10px;
     }
-
-    .trip-header h2 {
-      font-size: 1rem;
-    }
-
-    .tag {
-      display: inline-flex;
-      align-items: center;
-      padding: 3px 8px;
+    button {
       border-radius: 999px;
-      font-size: 0.75rem;
-      background: var(--primary-soft);
-      color: var(--primary);
-      margin-left: 4px;
-    }
-
-    .trip-note {
-      font-size: 0.8rem;
-      color: var(--text-sub);
-    }
-
-    .table-wrapper {
-      overflow-x: auto;
-      border-radius: 10px;
-      border: 1px solid var(--border);
-      margin-top: 8px;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      min-width: 720px;
-      font-size: 0.85rem;
-    }
-
-    thead {
-      background: #f9fafb;
-    }
-
-    th,
-    td {
-      padding: 8px 10px;
-      border-bottom: 1px solid var(--border);
-      vertical-align: top;
-    }
-
-    th {
-      text-align: left;
-      font-weight: 600;
-      color: var(--text-sub);
-      position: sticky;
-      top: 0;
-      background: #f9fafb;
-      z-index: 1;
-    }
-
-    tbody tr:nth-child(even) {
-      background: #f9fafb;
-    }
-
-    .date-cell {
-      font-weight: 600;
+      border: none;
+      padding: 8px 16px;
+      font-size: 14px;
+      cursor: pointer;
+      background: var(--bg-card);
+      color: var(--brown-main);
+      box-shadow: 0 1px 3px rgba(0,0,0,.15);
       white-space: nowrap;
     }
-
-    .area-chip {
-      display: inline-flex;
-      padding: 2px 7px;
+    button:active {
+      transform: translateY(1px);
+      box-shadow: 0 0 1px rgba(0,0,0,.2);
+    }
+    .btn-secondary {
+      background: #fff9ef;
+    }
+    .day-nav {
+      background: #fff5de;
+      padding: 8px 4px 10px;
+      overflow-x: auto;
+      position: sticky;
+      top: 0;
+      z-index: 5;
+    }
+    .day-nav-row {
+      display: flex;
+      gap: 8px;
+      padding: 2px 8px;
+    }
+    .day-chip {
+      flex: 0 0 auto;
+      min-width: 92px;
+      text-align: center;
+      background: #fff;
       border-radius: 999px;
-      background: #fee2e2;
-      color: #b91c1c;
-      font-size: 0.75rem;
+      padding: 8px 14px;
+      text-decoration: none;
+      color: var(--brown-main);
+      box-shadow: 0 1px 3px rgba(0,0,0,.15);
+      border: 1px solid #f7d2a2;
+      cursor: grab;
+    }
+    .day-chip.dragging {
+      opacity: 0.6;
+      cursor: grabbing;
+    }
+    .day-chip-main {
+      display: block;
+      font-weight: 700;
+      font-size: 14px;
+    }
+    .day-chip-sub {
+      display: block;
+      font-size: 12px;
+      margin-top: 2px;
+    }
+    [contenteditable="true"] {
+      outline: none;
+    }
+    main {
+      padding: 10px 10px 90px;
+      background: linear-gradient(#e8f5ff, #fff9ee);
+    }
+    section[id^="day-"] {
+      margin: 12px 0;
+      background: var(--bg-day);
+      border-radius: 18px;
+      padding: 14px 12px 16px;
+      box-shadow: 0 1px 4px rgba(0,0,0,.12);
+    }
+    .day-title {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+    .expense-card {
+      background: #fff;
+      border-radius: 14px;
+      padding: 10px 12px;
+      font-size: 14px;
+      margin-bottom: 10px;
+      border: 1px solid #e6f0ff;
+    }
+    .expense-title {
+      font-weight: 700;
       margin-bottom: 4px;
     }
-
-    .area-chip--yellow {
-      background: #fef3c7;
-      color: #92400e;
+    .quick-add {
+      background: #fffaf3;
+      border-radius: 16px;
+      border: 1px dashed var(--border-soft);
+      padding: 10px 12px 12px;
+      margin-bottom: 8px;
     }
-
-    .area-chip--purple {
-      background: #ede9fe;
-      color: #5b21b6;
-    }
-
-    .area-chip--blue {
-      background: #dbeafe;
-      color: #1d4ed8;
-    }
-
-    .area-chip--green {
-      background: #dcfce7;
-      color: #15803d;
-    }
-
-    .place-title {
-      font-weight: 600;
-      margin-bottom: 2px;
-    }
-
-    .place-sub {
-      color: var(--text-sub);
-      font-size: 0.8rem;
-      line-height: 1.3;
-    }
-
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      padding: 2px 6px;
-      border-radius: 999px;
-      font-size: 0.7rem;
-      background: #e0f2fe;
-      color: #0369a1;
-      margin-right: 4px;
-    }
-
-    .highlight {
-      color: var(--accent);
-      font-weight: 600;
-    }
-
-    .empty-row {
-      color: #9ca3af;
-      font-style: italic;
-    }
-
-    /* 其他分頁大致排版 */
-    .section-box {
-      border-radius: 10px;
-      border: 1px dashed var(--border);
-      padding: 12px;
-      font-size: 0.85rem;
-      color: var(--text-sub);
-      margin-top: 10px;
-    }
-
-    .section-box h3 {
-      font-size: 0.95rem;
+    .quick-add-title {
+      font-weight: 700;
       margin-bottom: 6px;
-      color: var(--text-main);
+      font-size: 14px;
     }
-
-    .pill-list {
+    .quick-add-row {
       display: flex;
       flex-wrap: wrap;
       gap: 6px;
-      margin-top: 4px;
     }
-
-    .pill {
-      padding: 4px 8px;
+    .qa-name, .qa-jp {
+      flex: 1 1 120px;
+      min-width: 0;
       border-radius: 999px;
-      border: 1px solid var(--border);
-      font-size: 0.75rem;
-      background: #f9fafb;
+      border: 1px solid #f1cda0;
+      padding: 6px 10px;
+      font-size: 13px;
+    }
+    .qa-btn {
+      padding-inline: 14px;
+      background: var(--accent);
+      color: #5a340c;
+      font-weight: 600;
     }
 
-    @media (max-width: 640px) {
-      header h1 {
-        font-size: 1.3rem;
-      }
+    .spot-card {
+      margin-top: 10px;
+      background: var(--bg-spot);
+      border-radius: 18px;
+      padding: 10px 12px 12px;
+      border: 1px solid #f5d6ab;
+      box-shadow: 0 1px 3px rgba(0,0,0,.12);
+    }
+    .spot-text .name-zh {
+      font-weight: 700;
+      font-size: 16px;
+    }
+    .spot-text .name-ja {
+      font-size: 14px;
+      margin-top: 2px;
+    }
+    .spot-meta {
+      font-size: 12px;
+      margin-top: 4px;
+      color: var(--brown-soft);
+    }
+    .btn-row {
+      margin-top: 8px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .btn-row .btn {
+      padding: 5px 10px;
+      font-size: 12px;
+    }
+    .btn-drag {
+      font-size: 11px;
+    }
+    .image-list,
+    .note-image-list {
+      margin-top: 6px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .spot-photo {
+      width: 72px;
+      height: 72px;
+      border-radius: 10px;
+      object-fit: cover;
+      border: 1px solid var(--border-soft);
+      box-shadow: 0 1px 3px rgba(190,150,90,.45);
+      cursor: pointer;
+    }
+    .spot-photo:hover {
+      opacity: 0.85;
+    }
+
+    .spot-note {
+      margin-top: 8px;
+      padding: 6px 8px 8px;
+      border-radius: 12px;
+      background: #fff7ec;
+      border: 1px dashed var(--border-soft);
+      font-size: 12px;
+      color: var(--brown-soft);
+    }
+    .spot-note-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 4px;
+    }
+    .spot-note-title {
+      font-weight: 600;
+      font-size: 12px;
+      color: var(--brown-main);
+    }
+    .spot-note-body {
+      white-space: pre-wrap;
+      min-height: 28px;
+    }
+
+    #btnUndo {
+      position: fixed;
+      right: 18px;
+      bottom: 18px;
+      background: #ffd694;
+      font-weight: 600;
+      padding-inline: 18px;
+      z-index: 20;
+    }
+
+    @media (min-width: 768px) {
       main {
-        padding: 10px;
-      }
-      .table-wrapper {
-        margin: 0 -6px;
-        border-radius: 0;
-        border-left: none;
-        border-right: none;
+        max-width: 720px;
+        margin: 0 auto;
       }
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <header>
-      <h1>2026 東京・NijiFes 行程</h1>
-      <p>依據試算表行程整理成的可瀏覽網頁空間，之後可以再自行調整內容。</p>
-      <div class="year-badge">
-        <span>📅 旅程年份</span> <strong>2026</strong>
-      </div>
-    </header>
-
-    <!-- Tabs -->
-    <div class="tabs">
-      <button class="tab active" data-tab="schedule">行程</button>
-      <button class="tab" data-tab="cost">總花費</button>
-      <button class="tab" data-tab="nijifes">NijiFes 周邊</button>
+  <header>
+    <h1>Niji Trip 2026 🌈</h1>
+    <p>東京行程・暖色主題・拖拉排序＋住宿欄位＋每日花費＋回上一步。</p>
+    <div class="hint">
+      <span>✏️</span>
+      <div>行程卡可以直接改文字、拖拉排序；錯誤可以用右下角「回上一步」。</div>
     </div>
+    <div class="top-btn-row">
+      <button id="btnExport">匯出備份（JSON）</button>
+      <button id="btnImport">匯入備份</button>
+      <button id="btnAddDay">＋ 新增一天</button>
+      <button id="btnRemoveDay" class="btn-secondary">－ 刪除最後一天</button>
+    </div>
+  </header>
 
-    <main>
-      <!-- 行程 -->
-      <section id="schedule" class="tab-panel active">
-        <div class="trip-header">
-          <h2>
-            行程總覽
-            <span class="tag">東京・橫濱・幕張</span>
-          </h2>
-          <p class="trip-note">2026/5/8 – 2026/5/21 ・ 共 14 天</p>
-        </div>
+  <!-- 匯入備份用 -->
+  <input type="file" id="backupImport" accept="application/json" style="display:none">
+  <!-- 照片上傳共用 input -->
+  <input type="file" id="photoInput" accept="image/*" style="display:none">
 
-        <div class="table-wrapper">
-          <table>
-            <thead>
-              <tr>
-                <th style="width: 70px;">日期</th>
-                <th style="width: 90px;">區域</th>
-                <th>主要行程 / 地點</th>
-                <th style="width: 230px;">地點・地址・營業時間 / 備註</th>
-              </tr>
-            </thead>
-            <tbody>
-              <!-- 5/8 -->
-              <tr>
-                <td class="date-cell">5/8 (五)</td>
-                <td>
-                  <div class="area-chip area-chip--blue">成田・上野</div>
-                </td>
-                <td>
-                  <div class="place-title">成田機場 → 東京市區</div>
-                  <div class="place-sub">入境、轉車前往上野飯店，放行李後附近逛逛。</div>
-                </td>
-                <td>
-                  <span class="badge">住宿</span>
-                  <div class="place-sub">
-                    VESSEL INN UENO IRIYA STATION<br />
-                    〒110-0013 東京都台東区入谷1丁目2-5-6
-                  </div>
-                </td>
-              </tr>
-
-              <!-- 5/9 -->
-              <tr>
-                <td class="date-cell">5/9 (六)</td>
-                <td>
-                  <div class="area-chip area-chip--purple">上野・秋葉原</div>
-                </td>
-                <td>
-                  <div class="place-title">上野公園 / 阿美橫丁・秋葉原逛街</div>
-                  <div class="place-sub">
-                    依照試算表安排：上野周邊散步、戰利品採買、秋葉原動漫相關店家。
-                  </div>
-                </td>
-                <td>
-                  <span class="badge">住宿</span>
-                  <div class="place-sub">同前一晚飯店（上野附近）</div>
-                </td>
-              </tr>
-
-              <!-- 5/10 -->
-              <tr>
-                <td class="date-cell">5/10 (日)</td>
-                <td>
-                  <div class="area-chip area-chip--yellow">澀谷・原宿</div>
-                </td>
-                <td>
-                  <div class="place-title">澀谷・原宿一日遊</div>
-                  <div class="place-sub">
-                    Kiddy Land 原宿本店、竹下通、表參道等，可配合試算表調整店家順序。
-                  </div>
-                </td>
-                <td>
-                  <div class="place-sub">
-                    Kiddy Land 原宿本店<br />
-                    東京都渋谷区神宮前6-1-9<br />
-                    11:00–20:00（以實際為準）
-                  </div>
-                </td>
-              </tr>
-
-              <!-- 5/11 -->
-              <tr>
-                <td class="date-cell">5/11 (一)</td>
-                <td>
-                  <div class="area-chip area-chip--red">淺草</div>
-                </td>
-                <td>
-                  <div class="place-title">淺草寺・仲見世通</div>
-                  <div class="place-sub">雷門拍照、淺草寺參拜、周邊商店街逛街。</div>
-                </td>
-                <td>
-                  <div class="place-sub">
-                    淺草寺<br />
-                    東京都台東区浅草2-3-1
-                  </div>
-                </td>
-              </tr>
-
-              <!-- 5/12 -->
-              <tr>
-                <td class="date-cell">5/12 (二)</td>
-                <td>
-                  <div class="area-chip area-chip--blue">新宿</div>
-                </td>
-                <td>
-                  <div class="place-title">新宿散策・靖國神社</div>
-                  <div class="place-sub">
-                    百貨、美食；依試算表內容安排其他景點。
-                  </div>
-                </td>
-                <td>
-                  <span class="badge">景點</span>
-                  <div class="place-sub">
-                    靖國神社<br />
-                    東京都千代田区九段北3丁目1−1<br />
-                    AM 9:00 – PM 5:00
-                  </div>
-                </td>
-              </tr>
-
-              <!-- 5/13 -->
-              <tr>
-                <td class="date-cell">5/13 (三)</td>
-                <td>
-                  <div class="area-chip area-chip--green">待補</div>
-                </td>
-                <td class="empty-row" colspan="2">
-                  這一天的行程可以依照你的試算表補上（例如：池袋、自由活動…）
-                </td>
-              </tr>
-
-              <!-- 5/14 -->
-              <tr>
-                <td class="date-cell">5/14 (四)</td>
-                <td>
-                  <div class="area-chip area-chip--green">待補</div>
-                </td>
-                <td class="empty-row" colspan="2">
-                  依試算表內容自行填入（可保留給臨時想去的店家）。
-                </td>
-              </tr>
-
-              <!-- 5/15 -->
-              <tr>
-                <td class="date-cell">5/15 (五)</td>
-                <td>
-                  <div class="area-chip area-chip--green">待補</div>
-                </td>
-                <td class="empty-row" colspan="2">
-                  預留彈性日 or 調整前幾天沒跑完的景點。
-                </td>
-              </tr>
-
-              <!-- 5/16 NijiFes -->
-              <tr>
-                <td class="date-cell">5/16 (六)</td>
-                <td>
-                  <div class="area-chip area-chip--purple">NijiFes</div>
-                </td>
-                <td>
-                  <div class="place-title">
-                    <span class="highlight">NijiFes Day 1</span>（幕張展覽館）
-                  </div>
-                  <div class="place-sub">
-                    以活動為主，排隊・入場・逛會場攤位、舞台活動。
-                  </div>
-                </td>
-                <td>
-                  <span class="badge">活動會場</span>
-                  <div class="place-sub">
-                    幕張展覽館<br />
-                    千葉市美浜区中瀬2-1
-                  </div>
-                </td>
-              </tr>
-
-              <!-- 5/17 NijiFes -->
-              <tr>
-                <td class="date-cell">5/17 (日)</td>
-                <td>
-                  <div class="area-chip area-chip--purple">NijiFes</div>
-                </td>
-                <td>
-                  <div class="place-title">
-                    <span class="highlight">NijiFes Day 2</span>（幕張展覽館）
-                  </div>
-                  <div class="place-sub">
-                    活動第二天，依試算表安排周邊、特典、舞台場次。
-                  </div>
-                </td>
-                <td>
-                  <span class="badge">活動會場</span>
-                  <div class="place-sub">
-                    幕張展覽館<br />
-                    千葉市美浜区中瀬2-1
-                  </div>
-                </td>
-              </tr>
-
-              <!-- 5/18 -->
-              <tr>
-                <td class="date-cell">5/18 (一)</td>
-                <td>
-                  <div class="area-chip area-chip--green">休息・移動</div>
-                </td>
-                <td class="empty-row" colspan="2">
-                  NijiFes 結束後的緩衝日，可安排睡晚一點、附近逛街或移動到橫濱。
-                </td>
-              </tr>
-
-              <!-- 5/19 橫濱 -->
-              <tr>
-                <td class="date-cell">5/19 (二)</td>
-                <td>
-                  <div class="area-chip area-chip--blue">橫濱</div>
-                </td>
-                <td>
-                  <div class="place-title">橫濱 VIVRE・商場逛街</div>
-                  <div class="place-sub">
-                    依試算表：橫濱 VIVRE 等商場，採買、吃美食。
-                  </div>
-                </td>
-                <td>
-                  <span class="badge">購物</span>
-                  <div class="place-sub">
-                    橫濱 VIVRE<br />
-                    神奈川県横浜市西区南幸2-15-13<br />
-                    平日 11:00–21:00 / 假日 10:00–21:00（以官網為準）
-                  </div>
-                </td>
-              </tr>
-
-              <!-- 5/20 伴手禮 -->
-              <tr>
-                <td class="date-cell">5/20 (三)</td>
-                <td>
-                  <div class="area-chip area-chip--yellow">伴手禮採買</div>
-                </td>
-                <td>
-                  <div class="place-title">伴手禮採買日</div>
-                  <div class="place-sub">
-                    以超市、藥妝店、車站商店街為主，把想帶回台灣的東西一次買齊。
-                  </div>
-                </td>
-                <td>
-                  <div class="place-sub">
-                    備註：確認托運行李重量、整理行李、預先丟掉多餘包裝。
-                  </div>
-                </td>
-              </tr>
-
-              <!-- 5/21 回程 -->
-              <tr>
-                <td class="date-cell">5/21 (四)</td>
-                <td>
-                  <div class="area-chip area-chip--red">返台</div>
-                </td>
-                <td>
-                  <div class="place-title">東京 → 成田機場 → 回台灣</div>
-                  <div class="place-sub">
-                    退房、前往機場辦理退稅與托運，搭機返回台灣。
-                  </div>
-                </td>
-                <td>
-                  <div class="place-sub">
-                    建議提早 3 小時到機場，確認交通與航班時間。（可在此填上實際班機資訊）
-                  </div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </section>
-
-      <!-- 總花費 -->
-      <section id="cost" class="tab-panel">
-        <h2>總花費整理</h2>
-        <p class="trip-note">
-          這一頁預留給你把試算表中的「總花費」整理進來（機票 / 住宿 / 交通 /
-          門票 / 餐飲 / 購物等）。
-        </p>
-
-        <div class="section-box">
-          <h3>建議區塊</h3>
-          <ul>
-            <li>機票與旅遊保險</li>
-            <li>住宿總金額（可依城市或飯店拆開）</li>
-            <li>交通費（JR PASS、Suica 充值、機場快線等）</li>
-            <li>活動票券（NijiFes 門票、景點門票）</li>
-            <li>餐飲與購物預算</li>
-          </ul>
-
-          <div class="pill-list">
-            <div class="pill">💴 日幣預算</div>
-            <div class="pill">💵 換匯金額</div>
-            <div class="pill">🧾 每日大致花費</div>
-            <div class="pill">📊 總結 &amp; 回顧</div>
-          </div>
-        </div>
-      </section>
-
-      <!-- NijiFes 周邊 -->
-      <section id="nijifes" class="tab-panel">
-        <h2>NijiFes 周邊／活動專區</h2>
-        <p class="trip-note">
-          專門放 NijiFes 相關資訊：會場配置、周邊預算、排隊策略、想看的舞台場次等等。
-        </p>
-
-        <div class="section-box">
-          <h3>可以在這裡紀錄的內容</h3>
-          <ul>
-            <li>想買的周邊清單＆預算</li>
-            <li>各成員／企劃的必買項目</li>
-            <li>排隊時間與動線筆記</li>
-            <li>舞台活動時間表（誰的舞台一定要看）</li>
-            <li>會場附近的用餐／休息點</li>
-          </ul>
-
-          <div class="pill-list">
-            <div class="pill">🛍 周邊購物清單</div>
-            <div class="pill">🎤 舞台行程</div>
-            <div class="pill">📍 會場地圖備註</div>
-            <div class="pill">💳 預計花費</div>
-          </div>
-        </div>
-      </section>
-    </main>
+  <div class="day-nav">
+    <div class="day-nav-row">
+      <a class="day-chip" href="#day-1" data-day-id="day-1" draggable="true">
+        <span class="day-chip-main" contenteditable="true">Day 1</span>
+        <span class="day-chip-sub" contenteditable="true">5/20</span>
+      </a>
+      <a class="day-chip" href="#day-2" data-day-id="day-2" draggable="true">
+        <span class="day-chip-main" contenteditable="true">Day 2</span>
+        <span class="day-chip-sub" contenteditable="true">5/21</span>
+      </a>
+    </div>
   </div>
 
+  <main id="content">
+    <!-- Day 1 -->
+    <section id="day-1" data-date="5/20">
+      <div class="day-title editable-block" contenteditable="true">Day 1（5/20）</div>
+
+      <div class="expense-card editable-block" contenteditable="true">
+        <div class="expense-title">當日備註／花費</div>
+        <div>今天的行程內容請在下方新增行程卡片，或貼上舊檔內容。</div>
+      </div>
+
+      <div class="quick-add">
+        <div class="quick-add-title">＋ 新增行程卡片</div>
+        <div class="quick-add-row">
+          <input type="text" class="qa-name" placeholder="地點名稱（中文）">
+          <input type="text" class="qa-jp" placeholder="日文名稱或地址">
+          <button class="qa-btn" type="button">新增</button>
+        </div>
+      </div>
+
+      <div class="spot-card" draggable="true">
+        <div class="spot-text">
+          <div class="name-zh" contenteditable="true">成田機場</div>
+          <div class="name-ja" contenteditable="true">成田空港</div>
+          <div class="spot-meta" contenteditable="true">成田・上野・抵達日本</div>
+        </div>
+        <div class="btn-row">
+          <button class="btn btn-dir" type="button">從飯店導航</button>
+          <button class="btn btn-map" type="button">在地圖上搜尋</button>
+          <button class="btn btn-photo" type="button">📷 新增圖片</button>
+          <button class="btn btn-drag btn-secondary" type="button">⋮⋮ 拖拉調整順序</button>
+        </div>
+        <div class="image-list"></div>
+        <div class="spot-note">
+          <div class="spot-note-header">
+            <span class="spot-note-title">備註</span>
+            <button class="btn btn-note-photo" type="button">📷</button>
+          </div>
+          <div class="spot-note-body" contenteditable="true">
+可在這裡寫這個景點的小提醒、餐點、排隊時間等…</div>
+          <div class="note-image-list"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Day 2 -->
+    <section id="day-2" data-date="5/21">
+      <div class="day-title editable-block" contenteditable="true">Day 2（5/21）</div>
+
+      <div class="expense-card editable-block" contenteditable="true">
+        <div class="expense-title">當日備註／花費</div>
+        <div>今天的行程內容請在下方新增行程卡片，或貼上舊檔內容。</div>
+      </div>
+
+      <div class="quick-add">
+        <div class="quick-add-title">＋ 新增行程卡片</div>
+        <div class="quick-add-row">
+          <input type="text" class="qa-name" placeholder="地點名稱（中文）">
+          <input type="text" class="qa-jp" placeholder="日文名稱或地址">
+          <button class="qa-btn" type="button">新增</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <button id="btnUndo">↩ 回上一步</button>
+
   <script>
-    // 簡單 Tab 切換
-    const tabs = document.querySelectorAll(".tab");
-    const panels = document.querySelectorAll(".tab-panel");
+  (function () {
+    const STORAGE_KEY = "nijiTrip2026_v15";
+    const UNDO_LIMIT = 25;
 
-    tabs.forEach((tab) => {
-      tab.addEventListener("click", () => {
-        const target = tab.dataset.tab;
+    let undoStack = [];
+    let isRestoring = false;
+    let saveTimer = null;
+    let currentPhotoCard = null;
+    let photoTargetType = "card"; // "card" | "note"
 
-        tabs.forEach((t) => t.classList.remove("active"));
-        panels.forEach((p) => p.classList.remove("active"));
+    // ========== 儲存 / 還原 ==========
+    function getState() {
+      const nav = document.querySelector(".day-nav-row");
+      const content = document.getElementById("content");
+      return {
+        nav: nav ? nav.innerHTML : "",
+        content: content ? content.innerHTML : ""
+      };
+    }
 
-        tab.classList.add("active");
-        document.getElementById(target).classList.add("active");
+    function setState(state) {
+      const nav = document.querySelector(".day-nav-row");
+      const content = document.getElementById("content");
+      if (!nav || !content) return;
+      isRestoring = true;
+      nav.innerHTML = state.nav || "";
+      content.innerHTML = state.content || "";
+      isRestoring = false;
+      afterDomRebuild();
+    }
+
+    function saveState(pushUndo = true) {
+      if (isRestoring) return;
+      const state = getState();
+      if (pushUndo) {
+        undoStack.push(state);
+        if (undoStack.length > UNDO_LIMIT) undoStack.shift();
+        updateUndoBtn();
+      }
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    }
+
+    function scheduleSave() {
+      clearTimeout(saveTimer);
+      saveTimer = setTimeout(() => saveState(true), 350);
+    }
+
+    function restoreFromLocal() {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) {
+        // 初次使用：把目前 DOM 存成初始狀態
+        saveState(false);
+        undoStack = [getState()];
+        updateUndoBtn();
+        return;
+      }
+      try {
+        const state = JSON.parse(raw);
+        setState(state);
+        undoStack = [state];
+        updateUndoBtn();
+      } catch (e) {
+        console.error("restore error", e);
+      }
+    }
+
+    function updateUndoBtn() {
+      const btn = document.getElementById("btnUndo");
+      if (!btn) return;
+      btn.disabled = undoStack.length <= 1;
+      btn.style.opacity = btn.disabled ? 0.5 : 1;
+    }
+
+    function undo() {
+      if (undoStack.length <= 1) return;
+      undoStack.pop();               // 移除現在這一步
+      const prev = undoStack[undoStack.length - 1];
+      setState(prev);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(prev));
+      updateUndoBtn();
+    }
+
+    // ========== 日期處理 ==========
+    function parseDate(str) {
+      const m = /(\d+)\s*\/\s*(\d+)/.exec(str || "");
+      if (!m) return null;
+      return new Date(2026, +m[1] - 1, +m[2]);
+    }
+    function formatDate(d) {
+      return `${d.getMonth() + 1}/${d.getDate()}`;
+    }
+    function addOneDayStr(str) {
+      const d = parseDate(str);
+      if (!d) return "";
+      d.setDate(d.getDate() + 1);
+      return formatDate(d);
+    }
+
+    // 依 Day chip 重新整理 dayN 與 section id / title / data-date
+    function renumberDays() {
+      const nav = document.querySelector(".day-nav-row");
+      const content = document.getElementById("content");
+      if (!nav || !content) return;
+
+      const chips = [...nav.querySelectorAll(".day-chip")];
+      const secs = [...content.querySelectorAll("section[id^='day-']")];
+
+      chips.forEach((chip, i) => {
+        const sec = secs[i];
+        if (!sec) return;
+        const dayNum = i + 1;
+        const sub = chip.querySelector(".day-chip-sub");
+        const main = chip.querySelector(".day-chip-main");
+        const dateText = sub ? sub.textContent.trim() : "";
+
+        chip.href = `#day-${dayNum}`;
+        chip.dataset.dayId = `day-${dayNum}`;
+
+        if (sec.id !== `day-${dayNum}`) sec.id = `day-${dayNum}`;
+        if (dateText) sec.setAttribute("data-date", dateText);
+
+        if (main) main.textContent = `Day ${dayNum}`;
+        const title = sec.querySelector(".day-title");
+        if (title) title.textContent = `Day ${dayNum}（${dateText}）`;
       });
+    }
+
+    // 從 Day 1 的日期開始，後面自動 +1 天
+    function autoFixDates() {
+      const nav = document.querySelector(".day-nav-row");
+      if (!nav) return;
+      const chips = [...nav.querySelectorAll(".day-chip")];
+      if (!chips.length) return;
+
+      let curDate = chips[0].querySelector(".day-chip-sub")?.textContent.trim();
+      for (let i = 1; i < chips.length; i++) {
+        const next = addOneDayStr(curDate);
+        const sub = chips[i].querySelector(".day-chip-sub");
+        if (sub && next) sub.textContent = next;
+        curDate = next;
+      }
+      renumberDays();
+      saveState(true);
+    }
+
+    // ========== 新增 / 刪除 天 ==========
+    function addDay() {
+      const nav = document.querySelector(".day-nav-row");
+      const content = document.getElementById("content");
+      if (!nav || !content) return;
+
+      const chips = [...nav.querySelectorAll(".day-chip")];
+      const secs = [...content.querySelectorAll("section[id^='day-']")];
+      const lastChip = chips[chips.length - 1];
+      const lastDate = lastChip?.querySelector(".day-chip-sub")?.textContent.trim() || "";
+      const newDate = addOneDayStr(lastDate) || lastDate || "5/20";
+      const newNum = chips.length + 1;
+
+      // Day chip
+      const chip = document.createElement("a");
+      chip.className = "day-chip";
+      chip.dataset.dayId = `day-${newNum}`;
+      chip.href = `#day-${newNum}`;
+      chip.setAttribute("draggable", "true");
+      chip.innerHTML = `
+        <span class="day-chip-main" contenteditable="true">Day ${newNum}</span>
+        <span class="day-chip-sub" contenteditable="true">${newDate}</span>
+      `;
+      nav.appendChild(chip);
+
+      // 對應 section
+      const sec = document.createElement("section");
+      sec.id = `day-${newNum}`;
+      sec.setAttribute("data-date", newDate);
+      sec.innerHTML = `
+        <div class="day-title editable-block" contenteditable="true">Day ${newNum}（${newDate}）</div>
+        <div class="expense-card editable-block" contenteditable="true">
+          <div class="expense-title">當日備註／花費</div>
+          <div>今天的行程內容請在下方新增行程卡片，或貼上舊檔內容。</div>
+        </div>
+        <div class="quick-add">
+          <div class="quick-add-title">＋ 新增行程卡片</div>
+          <div class="quick-add-row">
+            <input type="text" class="qa-name" placeholder="地點名稱（中文）">
+            <input type="text" class="qa-jp" placeholder="日文名稱或地址">
+            <button class="qa-btn" type="button">新增</button>
+          </div>
+        </div>
+      `;
+      content.appendChild(sec);
+
+      attachDayDrag();
+      attachCardEvents();
+      renumberDays();
+      autoFixDates();
+    }
+
+    function removeDay() {
+      const nav = document.querySelector(".day-nav-row");
+      const content = document.getElementById("content");
+      if (!nav || !content) return;
+
+      const chips = [...nav.querySelectorAll(".day-chip")];
+      const secs = [...content.querySelectorAll("section[id^='day-']")];
+      if (chips.length <= 1) {
+        alert("至少要保留一天唷！");
+        return;
+      }
+      chips[chips.length - 1].remove();
+      secs[secs.length - 1].remove();
+
+      renumberDays();
+      saveState(true);
+    }
+
+    // ========== 拖拉 Day chip ==========
+    function attachDayDrag() {
+      const nav = document.querySelector(".day-nav-row");
+      if (!nav) return;
+
+      [...nav.querySelectorAll(".day-chip")].forEach(chip => {
+        chip.setAttribute("draggable", "true");
+      });
+
+      let dragging = null;
+
+      nav.onDragStartListener && nav.removeEventListener("dragstart", nav.onDragStartListener);
+      nav.onDragOverListener && nav.removeEventListener("dragover", nav.onDragOverListener);
+      nav.onDragEndListener && nav.removeEventListener("dragend", nav.onDragEndListener);
+
+      nav.onDragStartListener = e => {
+        const chip = e.target.closest(".day-chip");
+        if (!chip) return;
+        dragging = chip;
+        chip.classList.add("dragging");
+        e.dataTransfer.effectAllowed = "move";
+      };
+      nav.onDragOverListener = e => {
+        e.preventDefault();
+        const target = e.target.closest(".day-chip");
+        if (!dragging || !target || dragging === target) return;
+        const rect = target.getBoundingClientRect();
+        const before = e.clientX < rect.left + rect.width / 2;
+        if (before) nav.insertBefore(dragging, target);
+        else nav.insertBefore(dragging, target.nextSibling);
+      };
+      nav.onDragEndListener = () => {
+        if (dragging) dragging.classList.remove("dragging");
+        dragging = null;
+        renumberDays();
+        autoFixDates();
+      };
+
+      nav.addEventListener("dragstart", nav.onDragStartListener);
+      nav.addEventListener("dragover", nav.onDragOverListener);
+      nav.addEventListener("dragend", nav.onDragEndListener);
+    }
+
+    function watchDateEdit() {
+      const nav = document.querySelector(".day-nav-row");
+      if (!nav) return;
+      nav.addEventListener("input", e => {
+        if (e.target.classList.contains("day-chip-sub")) {
+          autoFixDates();
+        } else if (e.target.classList.contains("day-chip-main")) {
+          renumberDays();
+          saveState(true);
+        }
+      });
+    }
+
+    // ========== 行程卡片相關 ==========
+    function createSpotCard(zh, jp) {
+      const card = document.createElement("div");
+      card.className = "spot-card";
+      card.setAttribute("draggable", "true");
+      card.innerHTML = `
+        <div class="spot-text">
+          <div class="name-zh" contenteditable="true">${zh || "新景點"}</div>
+          <div class="name-ja" contenteditable="true">${jp || ""}</div>
+          <div class="spot-meta" contenteditable="true">可輸入地區・車站・其他說明</div>
+        </div>
+        <div class="btn-row">
+          <button class="btn btn-dir" type="button">從飯店導航</button>
+          <button class="btn btn-map" type="button">在地圖上搜尋</button>
+          <button class="btn btn-photo" type="button">📷 新增圖片</button>
+          <button class="btn btn-drag btn-secondary" type="button">⋮⋮ 拖拉調整順序</button>
+        </div>
+        <div class="image-list"></div>
+        <div class="spot-note">
+          <div class="spot-note-header">
+            <span class="spot-note-title">備註</span>
+            <button class="btn btn-note-photo" type="button">📷</button>
+          </div>
+          <div class="spot-note-body" contenteditable="true">可在這裡寫這個景點的小提醒、餐點、排隊時間等…</div>
+          <div class="note-image-list"></div>
+        </div>
+      `;
+      return card;
+    }
+
+    function attachCardEvents() {
+      const content = document.getElementById("content");
+      if (!content) return;
+
+      // 快速新增行程卡片
+      content.querySelectorAll(".quick-add .qa-btn").forEach(btn => {
+        btn.onclick = () => {
+          const qa = btn.closest(".quick-add");
+          const sec = btn.closest("section[id^='day-']");
+          if (!qa || !sec) return;
+          const nameInput = qa.querySelector(".qa-name");
+          const jpInput = qa.querySelector(".qa-jp");
+          const zh = nameInput.value.trim() || "新景點";
+          const jp = jpInput.value.trim();
+          const card = createSpotCard(zh, jp);
+          sec.appendChild(card);
+          nameInput.value = "";
+          jpInput.value = "";
+          attachCardDrag();
+          attachPhotoButtons();
+          scheduleSave();
+        };
+      });
+
+      attachCardDrag();
+      attachPhotoButtons();
+      attachMapButtons();
+    }
+
+    // 拖拉行程卡片
+    function attachCardDrag() {
+      const content = document.getElementById("content");
+      if (!content) return;
+      content.querySelectorAll(".spot-card").forEach(card => {
+        card.setAttribute("draggable", "true");
+      });
+
+      let draggingCard = null;
+
+      content.onCardDragStart && content.removeEventListener("dragstart", content.onCardDragStart);
+      content.onCardDragOver && content.removeEventListener("dragover", content.onCardDragOver);
+      content.onCardDragEnd && content.removeEventListener("dragend", content.onCardDragEnd);
+
+      content.onCardDragStart = e => {
+        const card = e.target.closest(".spot-card");
+        if (!card) return;
+        draggingCard = card;
+        card.classList.add("dragging");
+        e.dataTransfer.effectAllowed = "move";
+      };
+      content.onCardDragOver = e => {
+        const card = e.target.closest(".spot-card");
+        if (!draggingCard || !card || draggingCard === card) return;
+        e.preventDefault();
+        const rect = card.getBoundingClientRect();
+        const before = e.clientY < rect.top + rect.height / 2;
+        const parent = card.parentElement;
+        if (before) parent.insertBefore(draggingCard, card);
+        else parent.insertBefore(draggingCard, card.nextSibling);
+      };
+      content.onCardDragEnd = () => {
+        if (draggingCard) draggingCard.classList.remove("dragging");
+        draggingCard = null;
+        scheduleSave();
+      };
+
+      content.addEventListener("dragstart", content.onCardDragStart);
+      content.addEventListener("dragover", content.onCardDragOver);
+      content.addEventListener("dragend", content.onCardDragEnd);
+    }
+
+    // 地圖按鈕
+    function attachMapButtons() {
+      const content = document.getElementById("content");
+      if (!content) return;
+
+      content.querySelectorAll(".btn-map").forEach(btn => {
+        btn.onclick = () => {
+          const card = btn.closest(".spot-card");
+          if (!card) return;
+          const zh = card.querySelector(".name-zh")?.textContent.trim() || "";
+          const jp = card.querySelector(".name-ja")?.textContent.trim() || "";
+          const q = encodeURIComponent((jp || zh) || "景點");
+          const url = "https://www.google.com/maps/search/?api=1&query=" + q;
+          window.open(url, "_blank");
+        };
+      });
+
+      content.querySelectorAll(".btn-dir").forEach(btn => {
+        btn.onclick = () => {
+          const card = btn.closest(".spot-card");
+          if (!card) return;
+          const zh = card.querySelector(".name-zh")?.textContent.trim() || "";
+          const jp = card.querySelector(".name-ja")?.textContent.trim() || "";
+          const q = encodeURIComponent("飯店 到 " + (jp || zh || "景點"));
+          const url = "https://www.google.com/maps/search/?api=1&query=" + q;
+          window.open(url, "_blank");
+        };
+      });
+    }
+
+    // 照片按鈕
+    function attachPhotoButtons() {
+      const content = document.getElementById("content");
+      const photoInput = document.getElementById("photoInput");
+      if (!content || !photoInput) return;
+
+      content.querySelectorAll(".btn-photo").forEach(btn => {
+        btn.onclick = () => {
+          const card = btn.closest(".spot-card");
+          if (!card) return;
+          currentPhotoCard = card;
+          photoTargetType = "card";
+          photoInput.value = "";
+          photoInput.click();
+        };
+      });
+
+      content.querySelectorAll(".btn-note-photo").forEach(btn => {
+        btn.onclick = () => {
+          const card = btn.closest(".spot-card");
+          if (!card) return;
+          currentPhotoCard = card;
+          photoTargetType = "note";
+          photoInput.value = "";
+          photoInput.click();
+        };
+      });
+
+      photoInput.onchange = () => {
+        const file = photoInput.files && photoInput.files[0];
+        if (!file || !currentPhotoCard) return;
+        const reader = new FileReader();
+        reader.onload = e => {
+          const url = e.target.result;
+          const list = photoTargetType === "note"
+            ? currentPhotoCard.querySelector(".note-image-list")
+            : currentPhotoCard.querySelector(".image-list");
+          if (!list) return;
+          const img = document.createElement("img");
+          img.className = "spot-photo";
+          img.src = url;
+          img.alt = "行程照片";
+          list.appendChild(img);
+
+          img.addEventListener("click", () => {
+            if (confirm("刪除這張照片？")) {
+              img.remove();
+              scheduleSave();
+            }
+          });
+
+          scheduleSave();
+        };
+        reader.readAsDataURL(file);
+      };
+    }
+
+    // ========== 匯出 / 匯入 ==========
+    function attachBackupButtons() {
+      const exportBtn = document.getElementById("btnExport");
+      const importBtn = document.getElementById("btnImport");
+      const fileInput = document.getElementById("backupImport");
+
+      if (exportBtn) {
+        exportBtn.onclick = () => {
+          const data = {
+            savedAt: new Date().toISOString(),
+            state: getState()
+          };
+          const blob = new Blob([JSON.stringify(data, null, 2)], {
+            type: "application/json"
+          });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = "NijiTrip2026_backup.json";
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+          URL.revokeObjectURL(url);
+        };
+      }
+
+      if (importBtn && fileInput) {
+        importBtn.onclick = () => {
+          fileInput.value = "";
+          fileInput.click();
+        };
+        fileInput.onchange = () => {
+          const file = fileInput.files && fileInput.files[0];
+          if (!file) return;
+          const reader = new FileReader();
+          reader.onload = e => {
+            try {
+              const obj = JSON.parse(e.target.result);
+              const state = obj.state || obj;
+              setState(state);
+              undoStack = [state];
+              localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+              updateUndoBtn();
+              alert("匯入完成！");
+            } catch (err) {
+              console.error(err);
+              alert("匯入失敗，檔案格式不正確。");
+            }
+          };
+          reader.readAsText(file, "utf-8");
+        };
+      }
+    }
+
+    // ========== DOM 重建後重新掛事件 ==========
+    function afterDomRebuild() {
+      // 編輯內容 → 自動存檔
+      const content = document.getElementById("content");
+      if (content) {
+        content.oninput = () => scheduleSave();
+      }
+      attachDayDrag();
+      watchDateEdit();
+      attachCardEvents();
+      attachBackupButtons();
+      renumberDays();
+    }
+
+    // ========== 初始化 ==========
+    document.addEventListener("DOMContentLoaded", () => {
+      restoreFromLocal();
+      afterDomRebuild();
+
+      document.getElementById("btnAddDay").onclick = addDay;
+      document.getElementById("btnRemoveDay").onclick = removeDay;
+      document.getElementById("btnUndo").onclick = undo;
+
+      // 初次載入時也修正一次日期
+      autoFixDates();
     });
+  })();
   </script>
 </body>
 </html>
