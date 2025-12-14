@@ -539,27 +539,39 @@
     }
 
     /* 重算 Day 編號（依 nav 順序） */
-    function recalcDayNumbers() {
-      const chips = navRow.querySelectorAll(".day-chip");
-      const sections = content.querySelectorAll(".day-section");
+   function recalcDayNumbers() {
+  const chips = navRow.querySelectorAll(".day-chip");
+  const sections = content.querySelectorAll(".day-section");
 
-      chips.forEach((chip, idx) => {
-        const num = idx + 1;
-        const id = chip.dataset.dayId;
-        const main = chip.querySelector(".day-chip-main");
-        if (main && /^Day\s+\d+$/i.test(main.textContent.trim())) {
-          main.textContent = "Day " + num;
-        }
-        const sec = Array.from(sections).find(s => s.dataset.dayId === id);
-        if (sec) {
-          const titleMain = sec.querySelector(".day-title-main");
-          if (titleMain && /^Day\s+\d+$/i.test(titleMain.textContent.trim())) {
-            titleMain.textContent = "Day " + num;
-          }
-        }
-      });
+  chips.forEach((chip, idx) => {
+    const num = idx + 1;
+    const id = chip.dataset.dayId;
+
+    // 上方白色 Day 標籤
+    const main = chip.querySelector(".day-chip-main");
+    if (main) {
+      const text = main.textContent.trim();
+      // 抓出 Day X 後面的所有文字
+      const m = text.match(/^Day\s+\d+(.*)$/i);
+      if (m) {
+        main.textContent = "Day " + num + (m[1] || "");
+      }
     }
 
+    // 下方對應的 Day 區塊標題
+    const sec = Array.from(sections).find(s => s.dataset.dayId === id);
+    if (sec) {
+      const titleMain = sec.querySelector(".day-title-main");
+      if (titleMain) {
+        const t = titleMain.textContent.trim();
+        const m2 = t.match(/^Day\s+\d+(.*)$/i);
+        if (m2) {
+          titleMain.textContent = "Day " + num + (m2[1] || "");
+        }
+      }
+    }
+  });
+}
     /* 行程卡片拖拉（只動 .spot-card，不動新增卡＆備註） */
     let draggingSpot = null;
     function attachSpotDragEvents() {
